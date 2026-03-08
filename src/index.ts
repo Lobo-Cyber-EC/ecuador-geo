@@ -422,8 +422,6 @@ export const getUbicacionPorCoordenadas = (
   return cantCercano;
 };
 
-// ─── Funciones de Búsqueda por Nombre ───────────────────────────────────────
-
 /**
  * Busca una provincia por nombre exacto o parcial (insensible a mayúsculas y acentos).
  * @param nombre Nombre de la provincia a buscar
@@ -459,8 +457,6 @@ export const getCantonPorNombre = (
   );
 };
 
-// ─── Zonas No Delimitadas ───────────────────────────────────────────────────
-
 /**
  * Retorna los cantones de las Zonas No Delimitadas del Ecuador (código INEC 90).
  * Estas zonas son territorios en disputa que no pertenecen oficialmente a ninguna provincia.
@@ -482,8 +478,6 @@ export const getZonasNoDelimitadas = (): Pick<
     };
   });
 };
-
-// ─── Validadores de Códigos INEC ────────────────────────────────────────────
 
 /**
  * Valida si un código INEC de provincia (2 dígitos) corresponde a una provincia real.
