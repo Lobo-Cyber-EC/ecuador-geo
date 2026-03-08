@@ -48,3 +48,10 @@ export interface CantonCercano extends Pick<
 > {
   distanciaKm: number;
 }
+
+export interface BuscarOpciones {
+  /** Cantidad maxima de resultados a retornar */
+  limite?: number;
+  /** Filtrar por tipo de entidad */
+  tipo?: "Provincia" | "Cantón" | "Parroquia";
+}

@@ -3,7 +3,6 @@
 **Base de datos geográfica estática, tipada y actualizada de Ecuador para NodeJS y el navegador.**
 
 [![npm version](https://img.shields.io/npm/v/@lobo.cyber.ec/ecuador-geo.svg?style=flat-square)](https://www.npmjs.com/package/@lobo.cyber.ec/ecuador-geo)
-[![License: MIT](https://img.shields.io/npm/v/@lobo.cyber.ec/ecuador-geo.svg?style=flat-square)](https://www.npmjs.com/package/@lobo.cyber.ec/ecuador-geo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg?style=flat-square)](https://www.typescriptlang.org/)
 
@@ -38,13 +37,16 @@ Una librería moderna y _offline_ que expone la **división política (Provincia
 
 ## Características
 
-- **Rendimiento Extremo** — No lee archivos del disco ni hace peticiones de red. Toda la data está pre-minificada en módulos JS (`ESM` y `CJS`).
-- **100% Actualizada** — Incluye correcciones históricas que otros paquetes no tienen, indexada por los códigos oficiales del INEC.
-- **Tipado Fuerte** — Interfaces exactas exportadas en TypeScript para autocompletado en el Editor.
-- **Universal** — Funciona en backend (NodeJS, Bun, Deno) y en frontend (React, Vue, Angular, Svelte).
-- **Procesamiento Espacial** — Cálculos matemáticos de distancia e iteraciones radiales incorporadas nativamente bajo la _Fórmula de Haversine_.
-- **Geocodificación Inversa** — Resolución de puntos cardinales georreferenciales (GPS) a puntos limítrofes (Cantones) en mili-segundos.
-- **Búsqueda Difusa** — Funciones integradas para autocompletado de texto con inmunidad a capitalización y tildes.
+- **Rendimiento Extremo** -- No lee archivos del disco ni hace peticiones de red. Toda la data esta pre-minificada en modulos JS (`ESM` y `CJS`).
+- **100% Actualizada** -- Incluye correcciones historicas que otros paquetes no tienen, indexada por los codigos oficiales del INEC.
+- **Tipado Fuerte** -- Interfaces exactas exportadas en TypeScript para autocompletado en el Editor.
+- **Universal** -- Funciona en backend (NodeJS, Bun, Deno) y en frontend (React, Vue, Angular, Svelte).
+- **Procesamiento Espacial** -- Calculos matematicos de distancia e iteraciones radiales incorporadas nativamente bajo la _Formula de Haversine_.
+- **Geocodificacion Inversa** -- Resolucion de puntos cardinales georreferenciales (GPS) a puntos limitrofes (Cantones) en mili-segundos.
+- **Busqueda Difusa** -- Funciones integradas para autocompletado de texto con inmunidad a capitalizacion y tildes, con soporte para filtros por tipo y limite de resultados.
+- **Busqueda por Nombre** -- Localiza provincias o cantones directamente por su nombre sin necesidad de conocer codigos INEC.
+- **Zonas No Delimitadas** -- Acceso a los territorios en disputa (zona INEC 90) que otros paquetes ignoran.
+- **Validadores INEC** -- Funciones booleanas rapidas para verificar la existencia real de codigos de provincias, cantones y parroquias.
 
 ---
 
@@ -310,19 +312,25 @@ function validarRegistroUsuario(body) {
 
 A continuación se detalla cada función principal exportada por el ecosistema.
 
-| Método                                          | Retorno                         | Descripción                                                                                  |
-| ----------------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------- |
-| `getProvincias()`                               | `Provincia[]`                   | Arreglo aligerado con los códigos INEC de las 24 provincias (y sus coordenadas).             |
-| `getProvincia(codigo)`                          | `Provincia \| undefined`        | Objeto pesado que contiene el despliegue del árbol completo de la provincia.                 |
-| `getCantones(codigoProv)`                       | `Canton[]`                      | Array plano con los Cantones pertenecientes a la provincia dada.                             |
-| `getParroquias(codigoProv, codigoCanton)`       | `Parroquia[]`                   | Array plano territorial listando las parroquias adjuntas al cantón provisto.                 |
-| `buscar(query)`                                 | `BuscarResultado[]`             | Resuelve búsqueda textual ignorando signos de puntuación de cualquier entidad registral.     |
-| `getUbicacionPorCodigo(codigo)`                 | `UbicacionDetalle \| undefined` | Resuelve estructura en cascada mapeando de inferior a superior las pertenencias geográficas. |
-| `getAllCantones()`                              | `Canton[]`                      | 221 elementos base expuestos linealmente.                                                    |
-| `getAllParroquias()`                            | `Parroquia[]`                   | +800 elementos base expuestos linealmente.                                                   |
-| `getDistanciaEntreUbicaciones(origen, destino)` | `number \| null`                | Computa la distancia curvada paramétrica `[km]`. Acepta `string` (INEC Code) o `Coordenada`. |
-| `getCantonesCercanos(codigoCentro, radioKm)`    | `CantonCercano[]`               | Expone cantones adyacentes ordenados por el delta de distancia `[km]`.                       |
-| `getUbicacionPorCoordenadas(Coordenadas)`       | `CantonCercano \| null`         | Resuelve inferencia de punto inverso para determinar el polígono territorial.                |
+| Metodo                                          | Retorno                         | Descripcion                                                                      |
+| ----------------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------- |
+| `getProvincias()`                               | `Provincia[]`                   | Arreglo aligerado con los codigos INEC de las 24 provincias (y sus coordenadas). |
+| `getProvincia(codigo)`                          | `Provincia \| undefined`        | Objeto que contiene el despliegue del arbol completo de la provincia.            |
+| `getCantones(codigoProv)`                       | `Canton[]`                      | Array plano con los Cantones pertenecientes a la provincia dada.                 |
+| `getParroquias(codigoProv, codigoCanton)`       | `Parroquia[]`                   | Array plano territorial listando las parroquias adjuntas al canton provisto.     |
+| `getAllCantones()`                              | `Canton[]`                      | 221 elementos base expuestos linealmente.                                        |
+| `getAllParroquias()`                            | `Parroquia[]`                   | +800 elementos base expuestos linealmente.                                       |
+| `buscar(query, opciones?)`                      | `BuscarResultado[]`             | Busqueda textual difusa. Acepta `{ limite, tipo }` para filtrar resultados.      |
+| `getUbicacionPorCodigo(codigo)`                 | `UbicacionDetalle \| undefined` | Resuelve estructura en cascada mapeando las pertenencias geograficas.            |
+| `getProvinciaPorNombre(nombre)`                 | `Provincia \| undefined`        | Busca provincia por nombre exacto o parcial (insensible a acentos).              |
+| `getCantonPorNombre(nombre)`                    | `Canton \| undefined`           | Busca canton por nombre exacto o parcial (insensible a acentos).                 |
+| `getZonasNoDelimitadas()`                       | `Canton[]`                      | Retorna los 3 cantones de la Zona 90 (territorios en disputa).                   |
+| `esCodigoProvinciaValido(codigo)`               | `boolean`                       | Valida si un codigo de 2 digitos corresponde a una provincia real.               |
+| `esCodigoCantonValido(codigo)`                  | `boolean`                       | Valida si un codigo de 4 digitos corresponde a un canton real.                   |
+| `esCodigoParroquiaValido(codigo)`               | `boolean`                       | Valida si un codigo de 6 digitos corresponde a una parroquia real.               |
+| `getDistanciaEntreUbicaciones(origen, destino)` | `number \| null`                | Computa la distancia curvada [km]. Acepta `string` o `Coordenada`.               |
+| `getCantonesCercanos(codigoCentro, radioKm)`    | `CantonCercano[]`               | Cantones adyacentes ordenados por distancia [km].                                |
+| `getUbicacionPorCoordenadas(coordenadas)`       | `CantonCercano \| null`         | Geocodificacion inversa: de GPS a canton mas cercano.                            |
 
 ---
 
@@ -332,10 +340,12 @@ Este archivo se encuentra en **Release Estándar Mantenido**. La división polí
 
 ### Hoja de Ruta (Roadmap)
 
-- ~~Normalización de codificación INEC string-padding~~
+- ~~Normalizacion de codificacion INEC string-padding~~
 - ~~Exportaciones Universales ESM/CJS Tipadas~~
-- ~~Cálculo nativo esférico (Haversine)~~
-- Empaquetamiento de Geometrías (Polígonos GeoJSON) para renderizado cartográfico nativo con leaflet/maptiler.
+- ~~Calculo nativo esferico (Haversine)~~
+- ~~Busqueda por nombre y filtros avanzados~~
+- ~~Zonas No Delimitadas y validadores INEC~~
+- Empaquetamiento de Geometrias (Poligonos GeoJSON) para renderizado cartografico nativo con leaflet/maptiler.
 
 ---
 

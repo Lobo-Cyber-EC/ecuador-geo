@@ -5,6 +5,7 @@ import type {
   Canton,
   Parroquia,
   BuscarResultado,
+  BuscarOpciones,
   UbicacionDetalle,
   Coordenada,
   CantonCercano,
@@ -162,46 +163,64 @@ const normalizeText = (text: string): string => {
 /**
  * Busca coincidencias difusas en provincias, cantones y parroquias.
  * @param query Texto a buscar
+ * @param opciones Opciones de filtrado: limite y tipo
  */
-export const buscar = (query: string): BuscarResultado[] => {
+export const buscar = (
+  query: string,
+  opciones?: BuscarOpciones,
+): BuscarResultado[] => {
   const normalizedQuery = normalizeText(query);
   if (!normalizedQuery) return [];
 
   const results: BuscarResultado[] = [];
+  const filtroTipo = opciones?.tipo;
+  const limite = opciones?.limite;
 
-  // Buscar en provincias
   const provincias = getProvincias();
   for (const prov of provincias) {
-    if (normalizeText(prov.nombre).includes(normalizedQuery)) {
-      results.push({
-        codigo: prov.codigo,
-        nombre: prov.nombre,
-        tipo: "Provincia",
-      });
+    if (limite && results.length >= limite) break;
+
+    if (!filtroTipo || filtroTipo === "Provincia") {
+      if (normalizeText(prov.nombre).includes(normalizedQuery)) {
+        results.push({
+          codigo: prov.codigo,
+          nombre: prov.nombre,
+          tipo: "Provincia",
+        });
+        if (limite && results.length >= limite) break;
+      }
     }
 
-    // Buscar en cantones
-    const cantones = getCantones(prov.codigo);
-    for (const cant of cantones) {
-      if (normalizeText(cant.nombre).includes(normalizedQuery)) {
-        results.push({
-          codigo: cant.codigo,
-          nombre: cant.nombre,
-          tipo: "Cantón",
-          lat: cant.lat,
-          lng: cant.lng,
-        });
-      }
-
-      // Buscar en parroquias
-      const parroquias = getParroquias(prov.codigo, cant.codigo);
-      for (const parr of parroquias) {
-        if (normalizeText(parr.nombre).includes(normalizedQuery)) {
+    if (!filtroTipo || filtroTipo === "Cantón") {
+      const cantones = getCantones(prov.codigo);
+      for (const cant of cantones) {
+        if (limite && results.length >= limite) break;
+        if (normalizeText(cant.nombre).includes(normalizedQuery)) {
           results.push({
-            codigo: parr.codigo,
-            nombre: parr.nombre,
-            tipo: "Parroquia",
+            codigo: cant.codigo,
+            nombre: cant.nombre,
+            tipo: "Cantón",
+            lat: cant.lat,
+            lng: cant.lng,
           });
+        }
+      }
+    }
+
+    if (!filtroTipo || filtroTipo === "Parroquia") {
+      const cantones = getCantones(prov.codigo);
+      for (const cant of cantones) {
+        if (limite && results.length >= limite) break;
+        const parroquias = getParroquias(prov.codigo, cant.codigo);
+        for (const parr of parroquias) {
+          if (limite && results.length >= limite) break;
+          if (normalizeText(parr.nombre).includes(normalizedQuery)) {
+            results.push({
+              codigo: parr.codigo,
+              nombre: parr.nombre,
+              tipo: "Parroquia",
+            });
+          }
         }
       }
     }
@@ -401,4 +420,95 @@ export const getUbicacionPorCoordenadas = (
   }
 
   return cantCercano;
+};
+
+// ─── Funciones de Búsqueda por Nombre ───────────────────────────────────────
+
+/**
+ * Busca una provincia por nombre exacto o parcial (insensible a mayúsculas y acentos).
+ * @param nombre Nombre de la provincia a buscar
+ */
+export const getProvinciaPorNombre = (
+  nombre: string,
+): Pick<Provincia, "codigo" | "nombre" | "lat" | "lng"> | undefined => {
+  const normalizado = normalizeText(nombre);
+  if (!normalizado) return undefined;
+
+  const provincias = getProvincias();
+  return (
+    provincias.find((p) => normalizeText(p.nombre) === normalizado) ||
+    provincias.find((p) => normalizeText(p.nombre).includes(normalizado))
+  );
+};
+
+/**
+ * Busca un cantón por nombre exacto o parcial (insensible a mayúsculas y acentos).
+ * Retorna el primer resultado encontrado.
+ * @param nombre Nombre del cantón a buscar
+ */
+export const getCantonPorNombre = (
+  nombre: string,
+): Pick<Canton, "codigo" | "nombre" | "lat" | "lng"> | undefined => {
+  const normalizado = normalizeText(nombre);
+  if (!normalizado) return undefined;
+
+  const cantones = getAllCantones();
+  return (
+    cantones.find((c) => normalizeText(c.nombre) === normalizado) ||
+    cantones.find((c) => normalizeText(c.nombre).includes(normalizado))
+  );
+};
+
+// ─── Zonas No Delimitadas ───────────────────────────────────────────────────
+
+/**
+ * Retorna los cantones de las Zonas No Delimitadas del Ecuador (código INEC 90).
+ * Estas zonas son territorios en disputa que no pertenecen oficialmente a ninguna provincia.
+ */
+export const getZonasNoDelimitadas = (): Pick<
+  Canton,
+  "codigo" | "nombre" | "lat" | "lng"
+>[] => {
+  const data: any = provinciasData["90"];
+  if (!data || !data.cantones) return [];
+
+  return Object.keys(data.cantones).map((code) => {
+    const c = data.cantones[code];
+    return {
+      codigo: code.padStart(4, "0"),
+      nombre: c.canton,
+      lat: c.lat,
+      lng: c.lng,
+    };
+  });
+};
+
+// ─── Validadores de Códigos INEC ────────────────────────────────────────────
+
+/**
+ * Valida si un código INEC de provincia (2 dígitos) corresponde a una provincia real.
+ * @param codigo Código de 2 dígitos
+ */
+export const esCodigoProvinciaValido = (codigo: string): boolean => {
+  return getProvincia(codigo) !== undefined;
+};
+
+/**
+ * Valida si un código INEC de cantón (4 dígitos) corresponde a un cantón real.
+ * @param codigo Código de 4 dígitos
+ */
+export const esCodigoCantonValido = (codigo: string): boolean => {
+  if (codigo.length !== 4) return false;
+  const ubicacion = getUbicacionPorCodigo(codigo);
+  return ubicacion !== undefined && ubicacion.tipo === "Cantón";
+};
+
+/**
+ * Valida si un código INEC de parroquia (6 dígitos) corresponde a una parroquia real.
+ * @param codigo Código de 6 dígitos
+ */
+export const esCodigoParroquiaValido = (codigo: string): boolean => {
+  if (codigo.length !== 6) return false;
+  const ubicacion = getUbicacionPorCodigo(codigo);
+  return ubicacion !== undefined && ubicacion.tipo === "Parroquia";
 };

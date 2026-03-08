@@ -7,6 +7,24 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
+## [1.1.0] - 2026-03-08
+
+### Agregado
+
+- **`getProvinciaPorNombre(nombre)`**: Busca una provincia por nombre exacto o parcial, insensible a mayusculas y acentos.
+- **`getCantonPorNombre(nombre)`**: Busca un canton por nombre exacto o parcial.
+- **`getZonasNoDelimitadas()`**: Acceso a los 3 cantones de la Zona 90 (Las Golondrinas, Manga del Cura, El Piedrero).
+- **`esCodigoProvinciaValido(codigo)`**: Validador booleano para codigos de provincia.
+- **`esCodigoCantonValido(codigo)`**: Validador booleano para codigos de canton.
+- **`esCodigoParroquiaValido(codigo)`**: Validador booleano para codigos de parroquia.
+- **`BuscarOpciones`**: Nueva interfaz para filtrar resultados de `buscar()`.
+
+### Modificado
+
+- **`buscar(query, opciones?)`**: Ahora acepta un segundo parametro opcional con `{ limite, tipo }` para filtrar resultados por tipo de entidad y limitar la cantidad de resultados retornados.
+
+---
+
 ## [1.0.0] - 2026-03-08
 
 ### Agregado

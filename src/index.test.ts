@@ -11,6 +11,12 @@ import {
   getDistanciaEntreUbicaciones,
   getCantonesCercanos,
   getUbicacionPorCoordenadas,
+  getProvinciaPorNombre,
+  getCantonPorNombre,
+  getZonasNoDelimitadas,
+  esCodigoProvinciaValido,
+  esCodigoCantonValido,
+  esCodigoParroquiaValido,
 } from "./index";
 
 describe("Core Data Functions", () => {
@@ -44,7 +50,7 @@ describe("Core Data Functions", () => {
     expect(cuenca?.lat).toBeDefined();
   });
 
-  it("getParroquias() should return parroquias for a given cantón", () => {
+  it("getParroquias() should return parroquias for a given canton", () => {
     const parroquiasCuenca = getParroquias("01", "0101");
     expect(parroquiasCuenca.length).toBeGreaterThan(0);
     const sanBlas = parroquiasCuenca.find((p) => p.codigo === "010110");
@@ -74,6 +80,23 @@ describe("Search and Hierarchy Functions", () => {
     ).toBeTruthy();
   });
 
+  it("buscar() should accept limit option", () => {
+    const all = buscar("san");
+    const limited = buscar("san", { limite: 3 });
+    expect(limited.length).toBeLessThanOrEqual(3);
+    expect(all.length).toBeGreaterThan(limited.length);
+  });
+
+  it("buscar() should filter by type", () => {
+    const soloProvincias = buscar("a", { tipo: "Provincia" });
+    expect(soloProvincias.length).toBeGreaterThan(0);
+    expect(soloProvincias.every((r) => r.tipo === "Provincia")).toBeTruthy();
+
+    const soloCantones = buscar("a", { tipo: "Cantón" });
+    expect(soloCantones.length).toBeGreaterThan(0);
+    expect(soloCantones.every((r) => r.tipo === "Cantón")).toBeTruthy();
+  });
+
   it("getUbicacionPorCodigo() should resolve hierarchy for Canton", () => {
     const quito = getUbicacionPorCodigo("1701");
     expect(quito).toBeDefined();
@@ -88,6 +111,78 @@ describe("Search and Hierarchy Functions", () => {
     expect(parroquia?.tipo).toBe("Parroquia");
     expect(parroquia?.canton?.nombre).toBe("QUITO");
     expect(parroquia?.provincia?.nombre).toBe("PICHINCHA");
+  });
+});
+
+describe("Name-based Lookups", () => {
+  it("getProvinciaPorNombre() finds by exact name (case-insensitive)", () => {
+    const result = getProvinciaPorNombre("pichincha");
+    expect(result).toBeDefined();
+    expect(result?.codigo).toBe("17");
+  });
+
+  it("getProvinciaPorNombre() finds by partial name", () => {
+    const result = getProvinciaPorNombre("guay");
+    expect(result).toBeDefined();
+    expect(result?.nombre).toBe("GUAYAS");
+  });
+
+  it("getProvinciaPorNombre() returns undefined for invalid name", () => {
+    expect(getProvinciaPorNombre("atlantida")).toBeUndefined();
+  });
+
+  it("getCantonPorNombre() finds by exact name", () => {
+    const result = getCantonPorNombre("cuenca");
+    expect(result).toBeDefined();
+    expect(result?.codigo).toBe("0101");
+  });
+
+  it("getCantonPorNombre() finds by partial name", () => {
+    const result = getCantonPorNombre("guayaq");
+    expect(result).toBeDefined();
+    expect(result?.nombre).toBe("GUAYAQUIL");
+  });
+});
+
+describe("Zonas No Delimitadas", () => {
+  it("getZonasNoDelimitadas() returns zone 90 cantones", () => {
+    const zonas = getZonasNoDelimitadas();
+    expect(zonas).toBeInstanceOf(Array);
+    expect(zonas.length).toBe(3);
+    expect(zonas.some((z) => z.nombre === "LAS GOLONDRINAS")).toBeTruthy();
+    expect(zonas.some((z) => z.nombre === "MANGA DEL CURA")).toBeTruthy();
+    expect(zonas.some((z) => z.nombre === "EL PIEDRERO")).toBeTruthy();
+  });
+
+  it("getZonasNoDelimitadas() cantones have coordinates", () => {
+    const zonas = getZonasNoDelimitadas();
+    for (const z of zonas) {
+      expect(z.lat).toBeDefined();
+      expect(z.lng).toBeDefined();
+    }
+  });
+});
+
+describe("INEC Code Validators", () => {
+  it("esCodigoProvinciaValido() validates real provinces", () => {
+    expect(esCodigoProvinciaValido("01")).toBe(true);
+    expect(esCodigoProvinciaValido("17")).toBe(true);
+    expect(esCodigoProvinciaValido("99")).toBe(false);
+    expect(esCodigoProvinciaValido("00")).toBe(false);
+  });
+
+  it("esCodigoCantonValido() validates real cantones", () => {
+    expect(esCodigoCantonValido("0101")).toBe(true);
+    expect(esCodigoCantonValido("1701")).toBe(true);
+    expect(esCodigoCantonValido("9999")).toBe(false);
+    expect(esCodigoCantonValido("01")).toBe(false); // too short
+  });
+
+  it("esCodigoParroquiaValido() validates real parroquias", () => {
+    expect(esCodigoParroquiaValido("010110")).toBe(true);
+    expect(esCodigoParroquiaValido("170150")).toBe(true);
+    expect(esCodigoParroquiaValido("999999")).toBe(false);
+    expect(esCodigoParroquiaValido("0101")).toBe(false); // too short
   });
 });
 
