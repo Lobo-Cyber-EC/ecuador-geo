@@ -1,0 +1,55 @@
+{
+  "name": "@lobo.cyber.ec/ecuador-geo",
+  "version": "1.0.0",
+  "description": "Base de datos offline de provincias, cantones y parroquias del Ecuador con funciones geoespaciales (Haversine, geocodificacion inversa).",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "ecuador",
+    "provincias",
+    "cantones",
+    "parroquias",
+    "inec",
+    "geografia",
+    "geolocation",
+    "haversine",
+    "geocoding",
+    "typescript",
+    "offline",
+    "geo",
+    "division-politica",
+    "sri"
+  ],
+  "author": "Lobo Cyber EC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lobo-Cyber-EC/ecuador-geo"
+  },
+  "homepage": "https://github.com/Lobo-Cyber-EC/ecuador-geo#readme",
+  "bugs": {
+    "url": "https://github.com/Lobo-Cyber-EC/ecuador-geo/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.5",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}
