@@ -1,6 +1,6 @@
 {
   "name": "@lobo.cyber.ec/ecuador-geo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Base de datos offline de provincias, cantones y parroquias del Ecuador con funciones geoespaciales (Haversine, geocodificacion inversa).",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
