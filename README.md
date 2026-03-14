@@ -21,7 +21,7 @@ Una librería moderna y _offline_ que expone la **división política (Provincia
 
 ---
 
-## Tabla de Contenidos
+## <img src="https://api.iconify.design/flat-color-icons:list.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Tabla de Contenidos
 
 - [Características](#características)
 - [Requisitos del Sistema](#requisitos-del-sistema)
@@ -35,7 +35,7 @@ Una librería moderna y _offline_ que expone la **división política (Provincia
 
 ---
 
-## Características
+## <img src="https://api.iconify.design/flat-color-icons:flash-on.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Características
 
 - **Rendimiento Extremo** -- No lee archivos del disco ni hace peticiones de red. Toda la data esta pre-minificada en modulos JS (`ESM` y `CJS`).
 - **100% Actualizada** -- Incluye correcciones historicas que otros paquetes no tienen, indexada por los codigos oficiales del INEC.
@@ -50,7 +50,7 @@ Una librería moderna y _offline_ que expone la **división política (Provincia
 
 ---
 
-## Requisitos del Sistema
+## <img src="https://api.iconify.design/flat-color-icons:settings.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Requisitos del Sistema
 
 | Requisito             | Detalles                                             |
 | --------------------- | ---------------------------------------------------- |
@@ -60,7 +60,7 @@ Una librería moderna y _offline_ que expone la **división política (Provincia
 
 ---
 
-## Instalación
+## <img src="https://api.iconify.design/flat-color-icons:download.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Instalación
 
 ```bash
 # npm
@@ -75,7 +75,7 @@ pnpm add @lobo.cyber.ec/ecuador-geo
 
 ---
 
-## Uso Básico
+## <img src="https://api.iconify.design/flat-color-icons:idea.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Uso Básico
 
 ### Obtener todas las Provincias
 
@@ -138,7 +138,7 @@ console.log(detalle.provincia.nombre); // PICHINCHA
 
 ---
 
-## Funciones Geográficas Avanzadas
+## <img src="https://api.iconify.design/flat-color-icons:globe.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Funciones Geográficas Avanzadas
 
 Gracias a la inyección de las coordenadas centralizadas (Latitud y Longitud) reales de las Provincias y Cantones, el ecosistema provee herramientas matemáticas espaciales eximiendo la necesidad de instalar dependencias pesadas como `geolib`.
 
@@ -187,7 +187,7 @@ console.log(resultadoInferencia.nombre); // "CUENCA"
 
 ---
 
-## Integración con Frameworks
+## <img src="https://api.iconify.design/flat-color-icons:multiple-devices.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Integración con Frameworks
 
 El paquete es completamente autónomo y agnóstico a tecnología, por lo cual la adopción Frontend es inmediata.
 
@@ -267,7 +267,7 @@ import { getProvincias, getCantones } from "@lobo.cyber.ec/ecuador-geo";
 @Component({
   selector: "app-ubicacion",
   template: `
-    <select (change)="onProvinciaChange($event.target.value)">
+    <select #provSelect (change)="onProvinciaChange(provSelect.value)">
       <option *ngFor="let p of provincias" [value]="p.codigo">
         {{ p.nombre }}
       </option>
@@ -308,7 +308,7 @@ function validarRegistroUsuario(body) {
 
 ---
 
-## Referencia de API
+## <img src="https://api.iconify.design/flat-color-icons:document.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Referencia de API
 
 A continuación se detalla cada función principal exportada por el ecosistema.
 
@@ -334,7 +334,7 @@ A continuación se detalla cada función principal exportada por el ecosistema.
 
 ---
 
-## Estado del Proyecto
+## <img src="https://api.iconify.design/flat-color-icons:info.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Estado del Proyecto
 
 Este archivo se encuentra en **Release Estándar Mantenido**. La división política provista concuerda plenamente con las resoluciones unánimes del listado INEC contemporáneo, incluyendo las rectificaciones para zonas sin delimitación.
 
@@ -349,7 +349,7 @@ Este archivo se encuentra en **Release Estándar Mantenido**. La división polí
 
 ---
 
-## Licencia
+## <img src="https://api.iconify.design/flat-color-icons:signature.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Licencia
 
 Este paquete es distribuido bajo **Licencia MIT**. Es libre y gratuito para uso estrictamente personal o implementaciones en software de categoría comercial/privada. Las contribuciones analíticas al repositorio base se reciben a través de Pull Requests.
 
