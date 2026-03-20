@@ -88,8 +88,8 @@ const provincias = getProvincias();
 console.log(provincias);
 /* Resultado:
 [
-  { codigo: "01", nombre: "Azuay" },
-  { codigo: "02", nombre: "Bolivar" },
+  { codigo: "01", nombre: "AZUAY", lat: -2.90055, lng: -79.00453 },
+  { codigo: "02", nombre: "BOLÍVAR", lat: -1.59263, lng: -79.00098 },
   ...
 ]
 */
@@ -103,6 +103,14 @@ Para listas geográficas anidadas, provea el código INEC a 2 dígitos de la pro
 import { getCantones } from "@lobo.cyber.ec/ecuador-geo";
 
 const cantonesGuayas = getCantones("09");
+console.log(cantonesGuayas.slice(0, 3));
+/* Resultado:
+[
+  { codigo: "0901", nombre: "GUAYAQUIL", lat: -2.16667, lng: -79.9 },
+  { codigo: "0902", nombre: "ALFREDO BAQUERIZO MORENO (JUJAN)", lat: -1.91667, lng: -79.51667 },
+  { codigo: "0903", nombre: "BALAO", lat: -2.91667, lng: -79.81667 }
+]
+*/
 ```
 
 ### Obtener Parroquias por Cantón
@@ -113,6 +121,15 @@ El nivel de resolución máximo granular en territorio ecuatoriano para geolocal
 import { getParroquias } from "@lobo.cyber.ec/ecuador-geo";
 
 const parroquiasQuito = getParroquias("17", "1701");
+console.log(parroquiasQuito.slice(0, 4));
+/* Resultado:
+[
+  { codigo: "170101", nombre: "BELISARIO QUEVEDO" },
+  { codigo: "170102", nombre: "CARCELÉN" },
+  { codigo: "170103", nombre: "CENTRO HISTÓRICO" },
+  { codigo: "170104", nombre: "CHILLOGALLO" }
+]
+*/
 ```
 
 ### Buscar por Coincidencia (Búsqueda Difusa)
@@ -123,6 +140,14 @@ Permite buscar texto ignorando mayúsculas y acentos. Extrae arrays mixtos a niv
 import { buscar } from "@lobo.cyber.ec/ecuador-geo";
 
 const resultados = buscar("guayaq");
+console.log(resultados.slice(0, 3));
+/* Resultado:
+[
+  { codigo: "0901", nombre: "GUAYAQUIL", tipo: "Cantón", lat: -2.16667, lng: -79.9 },
+  { codigo: "0916", nombre: "GUAYAQUIL", tipo: "Parroquia" },
+  { codigo: "0925", nombre: "GUAYAQUIL", tipo: "Parroquia" }
+]
+*/
 ```
 
 ### Obtener Detalle de Ubicación por Código
@@ -134,6 +159,16 @@ import { getUbicacionPorCodigo } from "@lobo.cyber.ec/ecuador-geo";
 
 const detalle = getUbicacionPorCodigo("170150");
 console.log(detalle.provincia.nombre); // PICHINCHA
+console.log(detalle);
+/* Resultado:
+{
+  codigo: "170150",
+  nombre: "QUITO",
+  tipo: "Parroquia",
+  provincia: { codigo: "17", nombre: "PICHINCHA", lat: -0.22985, lng: -78.52495 },
+  canton: { codigo: "1701", nombre: "QUITO", lat: -0.22985, lng: -78.52495 }
+}
+*/
 ```
 
 ---
@@ -152,12 +187,15 @@ import { getDistanciaEntreUbicaciones } from "@lobo.cyber.ec/ecuador-geo";
 // Distancia entre Quito (1701) y Guayaquil (0901)
 const distancia = getDistanciaEntreUbicaciones("1701", "0901");
 console.log(`Distancia: ${distancia} km`);
+// Distancia: 273.03 km (aprox)
 
 // Computando con GPS directo en tiempo real
 const desdeGPS = getDistanciaEntreUbicaciones(
   { lat: -0.18, lng: -78.46 },
   "0901",
 );
+console.log(desdeGPS);
+// 268.44 (aprox)
 ```
 
 ### Lugares Cercanos (Resolución Radial)
@@ -170,6 +208,14 @@ import { getCantonesCercanos } from "@lobo.cyber.ec/ecuador-geo";
 // Analiza los polígonos aledaños en 30KM a la redonda de Quito
 const cantonesAledanos = getCantonesCercanos("1701", 30);
 console.log(cantonesAledanos[0].distanciaKm);
+console.log(cantonesAledanos.slice(0, 3));
+/* Resultado:
+[
+  { codigo: "1704", nombre: "MEJÍA", lat: -0.5, lng: -78.56667, distanciaKm: 30.31 },
+  { codigo: "1708", nombre: "PEDRO MONCAYO", lat: 0.05, lng: -78.2, distanciaKm: 39.58 },
+  { codigo: "1710", nombre: "RUMIÑAHUI", lat: -0.3, lng: -78.45, distanciaKm: 10.22 }
+]
+*/
 ```
 
 ### Geocodificación Inversa Topológica
@@ -183,6 +229,16 @@ const localizacionTelefono = { lat: -2.90055, lng: -79.00453 };
 const resultadoInferencia = getUbicacionPorCoordenadas(localizacionTelefono);
 
 console.log(resultadoInferencia.nombre); // "CUENCA"
+console.log(resultadoInferencia);
+/* Resultado:
+{
+  codigo: "0101",
+  nombre: "CUENCA",
+  lat: -2.90055,
+  lng: -79.00453,
+  distanciaKm: 0
+}
+*/
 ```
 
 ---
@@ -312,19 +368,19 @@ function validarRegistroUsuario(body) {
 
 A continuación se detalla cada función principal exportada por el ecosistema.
 
-| Metodo                                          | Retorno                         | Descripcion                                                                      |
-| ----------------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------- |
-| `getProvincias()`                               | `Provincia[]`                   | Arreglo aligerado con los codigos INEC de las 24 provincias (y sus coordenadas). |
+| Metodo                                          | Retorno                                              | Descripcion                                                                      |
+| ----------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `getProvincias()`                               | `Pick<Provincia, "codigo" \| "nombre" \| "lat" \| "lng">[]` | Arreglo aligerado con los codigos INEC de las 24 provincias (y sus coordenadas). |
 | `getProvincia(codigo)`                          | `Provincia \| undefined`        | Objeto que contiene el despliegue del arbol completo de la provincia.            |
-| `getCantones(codigoProv)`                       | `Canton[]`                      | Array plano con los Cantones pertenecientes a la provincia dada.                 |
-| `getParroquias(codigoProv, codigoCanton)`       | `Parroquia[]`                   | Array plano territorial listando las parroquias adjuntas al canton provisto.     |
-| `getAllCantones()`                              | `Canton[]`                      | 221 elementos base expuestos linealmente.                                        |
-| `getAllParroquias()`                            | `Parroquia[]`                   | +800 elementos base expuestos linealmente.                                       |
+| `getCantones(codigoProv)`                       | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng">[]` | Array plano con los Cantones pertenecientes a la provincia dada.                 |
+| `getParroquias(codigoProv, codigoCanton)`       | `Pick<Parroquia, "codigo" \| "nombre">[]`                  | Array plano territorial listando las parroquias adjuntas al canton provisto.     |
+| `getAllCantones()`                              | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng">[]` | 221 elementos base expuestos linealmente.                                        |
+| `getAllParroquias()`                            | `Pick<Parroquia, "codigo" \| "nombre">[]`                  | +800 elementos base expuestos linealmente.                                       |
 | `buscar(query, opciones?)`                      | `BuscarResultado[]`             | Busqueda textual difusa. Acepta `{ limite, tipo }` para filtrar resultados.      |
 | `getUbicacionPorCodigo(codigo)`                 | `UbicacionDetalle \| undefined` | Resuelve estructura en cascada mapeando las pertenencias geograficas.            |
-| `getProvinciaPorNombre(nombre)`                 | `Provincia \| undefined`        | Busca provincia por nombre exacto o parcial (insensible a acentos).              |
-| `getCantonPorNombre(nombre)`                    | `Canton \| undefined`           | Busca canton por nombre exacto o parcial (insensible a acentos).                 |
-| `getZonasNoDelimitadas()`                       | `Canton[]`                      | Retorna los 3 cantones de la Zona 90 (territorios en disputa).                   |
+| `getProvinciaPorNombre(nombre)`                 | `Pick<Provincia, "codigo" \| "nombre" \| "lat" \| "lng"> \| undefined` | Busca provincia por nombre exacto o parcial (insensible a acentos).              |
+| `getCantonPorNombre(nombre)`                    | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng"> \| undefined` | Busca canton por nombre exacto o parcial (insensible a acentos).                 |
+| `getZonasNoDelimitadas()`                       | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng">[]` | Retorna los 3 cantones de la Zona 90 (territorios en disputa).                   |
 | `esCodigoProvinciaValido(codigo)`               | `boolean`                       | Valida si un codigo de 2 digitos corresponde a una provincia real.               |
 | `esCodigoCantonValido(codigo)`                  | `boolean`                       | Valida si un codigo de 4 digitos corresponde a un canton real.                   |
 | `esCodigoParroquiaValido(codigo)`               | `boolean`                       | Valida si un codigo de 6 digitos corresponde a una parroquia real.               |
