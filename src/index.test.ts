@@ -218,4 +218,127 @@ describe("Geo-Spatial Features", () => {
     expect(resolved?.nombre).toBe("CUENCA");
     expect(resolved?.distanciaKm).toBeLessThan(1); // Very close or 0
   });
+
+  it("getCantonesCercanos() with a parroquia code excludes its own canton", () => {
+    const cercanos = getCantonesCercanos("170150", 30);
+    expect(cercanos.some((c) => c.codigo === "1701")).toBe(false);
+    expect(cercanos.length).toBeGreaterThan(0);
+  });
+
+  it("getCantonesCercanos() returns [] for an invalid radius", () => {
+    expect(getCantonesCercanos("1701", -5)).toEqual([]);
+    expect(getCantonesCercanos("1701", NaN)).toEqual([]);
+  });
+
+  it("getDistanciaEntreUbicaciones() returns null for invalid inputs", () => {
+    expect(getDistanciaEntreUbicaciones("xx", "1701")).toBeNull();
+    expect(
+      getDistanciaEntreUbicaciones(null as unknown as string, "1701"),
+    ).toBeNull();
+  });
+
+  it("getUbicacionPorCoordenadas() returns null for invalid coordinates", () => {
+    expect(getUbicacionPorCoordenadas({ lat: NaN, lng: -78 })).toBeNull();
+    expect(
+      getUbicacionPorCoordenadas(null as unknown as { lat: number; lng: number }),
+    ).toBeNull();
+  });
+});
+
+describe("Data Quality", () => {
+  // Rango aproximado del territorio ecuatoriano, incluyendo Galápagos
+  const dentroDeEcuador = (lat: number, lng: number) =>
+    lat <= 2 && lat >= -5.1 && lng <= -75 && lng >= -92.1;
+
+  it("every province and canton has coordinates inside Ecuador", () => {
+    for (const p of getProvincias()) {
+      expect(dentroDeEcuador(p.lat!, p.lng!), `provincia ${p.codigo}`).toBe(true);
+    }
+    for (const c of getAllCantones()) {
+      expect(c.lat, `canton ${c.codigo}`).toBeDefined();
+      expect(dentroDeEcuador(c.lat!, c.lng!), `canton ${c.codigo}`).toBe(true);
+    }
+  });
+
+  it("each province is located at its capital (first canton)", () => {
+    for (const p of getProvincias()) {
+      const capital = getCantones(p.codigo)[0];
+      const dist = getDistanciaEntreUbicaciones(
+        { lat: p.lat!, lng: p.lng! },
+        { lat: capital.lat!, lng: capital.lng! },
+      );
+      expect(dist, `provincia ${p.codigo}`).toBeLessThan(25);
+    }
+  });
+
+  it("previously wrong coordinates are fixed", () => {
+    // Bolívar (Carchi) y Olmedo (Manabí) tenían coordenadas de otras provincias
+    expect(getDistanciaEntreUbicaciones("0402", "0401")!).toBeLessThan(60);
+    expect(getDistanciaEntreUbicaciones("1318", "1301")!).toBeLessThan(100);
+    // Cantones que no tenían coordenadas
+    for (const codigo of ["0919", "1905", "2201"]) {
+      expect(getUbicacionPorCodigo(codigo)?.lat, codigo).toBeDefined();
+    }
+  });
+
+  it("there are no duplicated codes", () => {
+    const cantones = getAllCantones().map((c) => c.codigo);
+    expect(new Set(cantones).size).toBe(cantones.length);
+    const parroquias = getAllParroquias().map((p) => p.codigo);
+    expect(new Set(parroquias).size).toBe(parroquias.length);
+  });
+});
+
+describe("Input Validation", () => {
+  it("rejects malformed codes instead of guessing", () => {
+    for (const codigo of ["9abc", "09.5", " 9", "-1", "", "__proto__", "constructor"]) {
+      expect(getProvincia(codigo), codigo).toBeUndefined();
+      expect(esCodigoProvinciaValido(codigo), codigo).toBe(false);
+    }
+    expect(getUbicacionPorCodigo("09 1")).toBeUndefined();
+    expect(getParroquias("09", "09x1")).toEqual([]);
+  });
+
+  it("keeps accepting unpadded codes in getters", () => {
+    expect(getProvincia("9")?.nombre).toBe("GUAYAS");
+    expect(getParroquias("9", "901").length).toBeGreaterThan(0);
+  });
+
+  it("esCodigoProvinciaValido() requires exactly 2 digits and excludes zone 90", () => {
+    expect(esCodigoProvinciaValido("9")).toBe(false);
+    expect(esCodigoProvinciaValido("90")).toBe(false);
+    expect(esCodigoProvinciaValido("09")).toBe(true);
+  });
+
+  it("buscar() handles non-string and empty queries", () => {
+    expect(buscar(undefined as unknown as string)).toEqual([]);
+    expect(buscar("   ")).toEqual([]);
+  });
+});
+
+describe("Name Disambiguation", () => {
+  it("getCantonPorNombre() can filter by province", () => {
+    expect(getCantonPorNombre("Bolívar")?.codigo).toBe("0402");
+    expect(getCantonPorNombre("Bolívar", "13")?.codigo).toBe("1302");
+    expect(getCantonPorNombre("Olmedo", "11")?.codigo).toBe("1116");
+    expect(getCantonPorNombre("Quito", "09")).toBeUndefined();
+  });
+});
+
+describe("Cache Safety", () => {
+  it("mutating a result does not affect later calls", () => {
+    const guayas = getProvincia("09")!;
+    guayas.nombre = "MUTADO";
+    guayas.cantones["0901"].nombre = "MUTADO";
+    guayas.cantones["0901"].parroquias["090101"].nombre = "MUTADO";
+    getCantones("09")[0].nombre = "MUTADO";
+    buscar("guayaquil")[0].nombre = "MUTADO";
+
+    const otra = getProvincia("09")!;
+    expect(otra.nombre).toBe("GUAYAS");
+    expect(otra.cantones["0901"].nombre).toBe("GUAYAQUIL");
+    expect(otra.cantones["0901"].parroquias["090101"].nombre).not.toBe("MUTADO");
+    expect(getCantones("09")[0].nombre).toBe("GUAYAQUIL");
+    expect(buscar("guayaquil")[0].nombre).not.toBe("MUTADO");
+  });
 });
