@@ -1,14 +1,24 @@
 export * from "./types";
+export { validarCedula, validarRUC, analizarRUC } from "./identificacion";
+export { formatearNombre } from "./texto";
 import { provinciasData } from "./data";
+import { provinciasInfo } from "./provinciasInfo";
+import { normalizeText, formatearNombre, distanciaEdicion } from "./texto";
 import type {
   Provincia,
   Canton,
   Parroquia,
   BuscarResultado,
   BuscarOpciones,
+  AutocompletarOpciones,
   UbicacionDetalle,
   Coordenada,
   CantonCercano,
+  OpcionSelect,
+  OpcionesSelectConfig,
+  OpcionesProvinciasConfig,
+  Region,
+  ZonaHoraria,
 } from "./types";
 
 type ProvinciaResumen = Pick<Provincia, "codigo" | "nombre" | "lat" | "lng">;
@@ -29,16 +39,6 @@ const normalizarCodigo = (
   if (typeof texto !== "string" || !/^\d+$/.test(texto)) return undefined;
   if (texto.length > longitud) return undefined;
   return texto.padStart(longitud, "0");
-};
-
-/**
- * Normaliza un string para búsquedas difusas: quita acentos y pasa a minúsculas.
- */
-const normalizeText = (text: string): string => {
-  return text
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase();
 };
 
 const esCoordenada = (valor: unknown): valor is Coordenada =>
@@ -130,10 +130,15 @@ const codigosProvincias = (): string[] =>
 interface EntradaIndice {
   resultado: BuscarResultado;
   normalizado: string;
+  /** Nombre normalizado con las palabras separadas por un espacio (sin signos) */
+  palabras: string;
   codigoProvincia: string;
 }
 
 let indiceBusqueda: EntradaIndice[] | undefined;
+
+const separarPalabras = (texto: string): string =>
+  texto.replace(/[^a-z0-9ñ]+/g, " ").trim();
 
 /**
  * Índice con los nombres ya normalizados, construido una sola vez.
@@ -146,12 +151,15 @@ const getIndiceBusqueda = (): EntradaIndice[] => {
   for (const codigoProv of codigosProvincias()) {
     const prov = getProvinciaInterna(codigoProv);
     if (!prov) continue;
-    const agregar = (resultado: BuscarResultado) =>
+    const agregar = (resultado: BuscarResultado) => {
+      const normalizado = normalizeText(resultado.nombre);
       indice.push({
         resultado,
-        normalizado: normalizeText(resultado.nombre),
+        normalizado,
+        palabras: separarPalabras(normalizado),
         codigoProvincia: prov.codigo,
       });
+    };
 
     agregar({ codigo: prov.codigo, nombre: prov.nombre, tipo: "Provincia" });
     const cantones = Object.values(prov.cantones);
@@ -545,4 +553,245 @@ export const esCodigoCantonValido = (codigo: string): boolean => {
 export const esCodigoParroquiaValido = (codigo: string): boolean => {
   if (typeof codigo !== "string" || codigo.length !== 6) return false;
   return getUbicacionPorCodigo(codigo)?.tipo === "Parroquia";
+};
+
+/**
+ * Retorna la provincia que corresponde a los 2 primeros dígitos de una cédula o RUC.
+ * No valida el número completo; usa `validarCedula` o `validarRUC` para eso.
+ * Retorna `undefined` para el código 30 (ecuatorianos registrados en el exterior).
+ * @param identificacion Cédula (10 dígitos) o RUC (13 dígitos)
+ */
+export const getProvinciaPorCedula = (
+  identificacion: string,
+): ProvinciaResumen | undefined => {
+  if (typeof identificacion !== "string" || !/^\d{10}(\d{3})?$/.test(identificacion))
+    return undefined;
+  const codigo = identificacion.slice(0, 2);
+  if (!esCodigoProvinciaValido(codigo)) return undefined;
+  const provincia = getProvinciaInterna(codigo);
+  return provincia ? resumenProvincia(provincia) : undefined;
+};
+
+/** Código de provincia de un código INEC válido de 2, 4 o 6 dígitos. */
+const provinciaDeCodigo = (codigo: string): string | undefined => {
+  const ubicacion = getUbicacionPorCodigo(codigo);
+  if (!ubicacion) return undefined;
+  return ubicacion.tipo === "Provincia"
+    ? ubicacion.codigo
+    : ubicacion.provincia?.codigo;
+};
+
+/**
+ * Retorna la región natural (Costa, Sierra, Amazonía o Insular) de una provincia,
+ * cantón o parroquia. Las Zonas No Delimitadas no tienen región.
+ * @param codigo Código INEC de 2, 4 o 6 dígitos
+ */
+export const getRegion = (codigo: string): Region | undefined => {
+  const prov = provinciaDeCodigo(codigo);
+  return prov ? provinciasInfo[prov]?.region : undefined;
+};
+
+/**
+ * Retorna la zona horaria IANA de una provincia, cantón o parroquia.
+ * Galápagos usa "Pacific/Galapagos" (UTC-6); el resto del país "America/Guayaquil" (UTC-5).
+ * @param codigo Código INEC de 2, 4 o 6 dígitos
+ */
+export const getZonaHoraria = (codigo: string): ZonaHoraria | undefined => {
+  const prov = provinciaDeCodigo(codigo);
+  return prov ? provinciasInfo[prov]?.zonaHoraria : undefined;
+};
+
+/**
+ * Retorna las provincias que pertenecen a una región natural.
+ * @param region "Costa" | "Sierra" | "Amazonía" | "Insular"
+ */
+export const getProvinciasPorRegion = (region: Region): ProvinciaResumen[] => {
+  return getProvincias().filter((p) => provinciasInfo[p.codigo]?.region === region);
+};
+
+const ordenarOpciones = (
+  opciones: OpcionSelect[],
+  config?: OpcionesSelectConfig,
+): OpcionSelect[] => {
+  if (config?.ordenarPor === "codigo") return opciones;
+  return opciones.sort((a, b) =>
+    a.label.localeCompare(b.label, "es", { sensitivity: "base" }),
+  );
+};
+
+/**
+ * Retorna las provincias como opciones `{ value, label }` listas para un dropdown.
+ * El label usa el nombre oficial con tildes (ej: "Manabí").
+ * @param config Orden (`ordenarPor`) y filtro por `region` (opcional)
+ */
+export const getOpcionesProvincias = (
+  config?: OpcionesProvinciasConfig,
+): OpcionSelect[] => {
+  const provincias = config?.region
+    ? getProvinciasPorRegion(config.region)
+    : getProvincias();
+  return ordenarOpciones(
+    provincias.map((p) => ({
+      value: p.codigo,
+      label: provinciasInfo[p.codigo]?.nombreOficial ?? formatearNombre(p.nombre),
+    })),
+    config,
+  );
+};
+
+/**
+ * Retorna los cantones de una provincia como opciones `{ value, label }`.
+ * @param codigoProvincia Código INEC de la provincia
+ * @param config Orden de las opciones (opcional)
+ */
+export const getOpcionesCantones = (
+  codigoProvincia: string,
+  config?: OpcionesSelectConfig,
+): OpcionSelect[] => {
+  return ordenarOpciones(
+    getCantones(codigoProvincia).map((c) => ({
+      value: c.codigo,
+      label: formatearNombre(c.nombre),
+    })),
+    config,
+  );
+};
+
+/**
+ * Retorna las parroquias de un cantón como opciones `{ value, label }`.
+ * @param codigoProvincia Código INEC de la provincia
+ * @param codigoCanton Código INEC del cantón
+ * @param config Orden de las opciones (opcional)
+ */
+export const getOpcionesParroquias = (
+  codigoProvincia: string,
+  codigoCanton: string,
+  config?: OpcionesSelectConfig,
+): OpcionSelect[] => {
+  return ordenarOpciones(
+    getParroquias(codigoProvincia, codigoCanton).map((p) => ({
+      value: p.codigo,
+      label: formatearNombre(p.nombre),
+    })),
+    config,
+  );
+};
+
+/**
+ * Retorna la ubicación completa como texto legible, de lo particular a lo general.
+ * @example formatearUbicacion("090112") // "Tarqui, Guayaquil, Guayas"
+ * @param codigo Código INEC de 2, 4 o 6 dígitos
+ * @param separador Texto entre cada nivel (default: ", ")
+ */
+export const formatearUbicacion = (
+  codigo: string,
+  separador = ", ",
+): string | undefined => {
+  const ubicacion = getUbicacionPorCodigo(codigo);
+  if (!ubicacion) return undefined;
+
+  const nombreProvincia = (p: ProvinciaResumen) =>
+    provinciasInfo[p.codigo]?.nombreOficial ?? formatearNombre(p.nombre);
+
+  const partes =
+    ubicacion.tipo === "Provincia"
+      ? [nombreProvincia(ubicacion)]
+      : [
+          formatearNombre(ubicacion.nombre),
+          ubicacion.canton && formatearNombre(ubicacion.canton.nombre),
+          ubicacion.provincia && nombreProvincia(ubicacion.provincia),
+        ];
+
+  return partes.filter(Boolean).join(separador);
+};
+
+const PRIORIDAD_TIPO: Record<BuscarResultado["tipo"], number> = {
+  Provincia: 0,
+  Cantón: 1,
+  Parroquia: 2,
+};
+
+/**
+ * Nivel de coincidencia de una entrada (menor es mejor) o `undefined` si no coincide:
+ * 0 = exacta, 1 = empieza con el texto, 2 = una palabra empieza con el texto,
+ * 3 = contiene el texto, 4-5 = con 1 o 2 errores de escritura.
+ */
+const nivelCoincidencia = (
+  entrada: EntradaIndice,
+  consulta: string,
+  erroresPermitidos: number,
+): number | undefined => {
+  const { palabras } = entrada;
+  const base = separarPalabras(entrada.normalizado.replace(/\(.*?\)/g, ""));
+  if (palabras === consulta || base === consulta) return 0;
+  if (palabras.startsWith(consulta)) return 1;
+  if ((" " + palabras).includes(" " + consulta)) return 2;
+  // Con 1 o 2 letras, una coincidencia en medio de la palabra es solo ruido
+  if (consulta.length < 3) return undefined;
+  if (palabras.includes(consulta)) return 3;
+  if (erroresPermitidos === 0) return undefined;
+
+  // Comparar contra cada inicio de palabra, con el largo de lo escrito (±1).
+  // Solo palabras que empiezan con la misma letra: equivocarse en la primera es raro.
+  let mejor = erroresPermitidos + 1;
+  for (let i = 0; i < palabras.length; i++) {
+    if (i > 0 && palabras[i - 1] !== " ") continue;
+    if (palabras[i] !== consulta[0]) continue;
+    for (let largo = consulta.length - 1; largo <= consulta.length + 1; largo++) {
+      const fragmento = palabras.slice(i, i + largo);
+      if (fragmento.length < consulta.length - 1) continue;
+      mejor = Math.min(mejor, distanciaEdicion(consulta, fragmento, erroresPermitidos));
+      if (mejor === 1) break;
+    }
+    if (mejor === 1) break;
+  }
+  return mejor <= erroresPermitidos ? 3 + mejor : undefined;
+};
+
+/**
+ * Autocompletado tolerante a errores de escritura, ordenado por relevancia:
+ * primero coincidencias exactas, luego las que empiezan con el texto y al final
+ * las que tienen errores (ej: "guayakil" → Guayaquil, "cuenka" → Cuenca).
+ * Para la búsqueda simple por subcadena en orden de código usa `buscar()`.
+ * @param query Texto escrito por el usuario
+ * @param opciones `limite` (default 10), `tipo` y `codigoProvincia` (opcionales)
+ */
+export const autocompletar = (
+  query: string,
+  opciones?: AutocompletarOpciones,
+): BuscarResultado[] => {
+  if (typeof query !== "string") return [];
+  const consulta = separarPalabras(normalizeText(query));
+  if (!consulta) return [];
+
+  const limite = opciones?.limite ?? 10;
+  const codigoProvincia =
+    opciones?.codigoProvincia !== undefined
+      ? normalizarCodigo(opciones.codigoProvincia, 2) ?? null
+      : undefined;
+  // Tolerancia según el largo: palabras cortas exigen coincidencia exacta
+  const erroresPermitidos =
+    consulta.length >= 8 ? 2 : consulta.length >= 5 ? 1 : 0;
+
+  const encontrados: { entrada: EntradaIndice; nivel: number }[] = [];
+  for (const entrada of getIndiceBusqueda()) {
+    if (opciones?.tipo && entrada.resultado.tipo !== opciones.tipo) continue;
+    if (codigoProvincia !== undefined && entrada.codigoProvincia !== codigoProvincia)
+      continue;
+    const nivel = nivelCoincidencia(entrada, consulta, erroresPermitidos);
+    if (nivel !== undefined) encontrados.push({ entrada, nivel });
+  }
+
+  encontrados.sort(
+    (a, b) =>
+      a.nivel - b.nivel ||
+      PRIORIDAD_TIPO[a.entrada.resultado.tipo] -
+        PRIORIDAD_TIPO[b.entrada.resultado.tipo] ||
+      a.entrada.resultado.nombre.length - b.entrada.resultado.nombre.length ||
+      a.entrada.resultado.codigo.localeCompare(b.entrada.resultado.codigo),
+  );
+
+  return encontrados
+    .slice(0, limite > 0 ? limite : undefined)
+    .map(({ entrada }) => ({ ...entrada.resultado }));
 };
