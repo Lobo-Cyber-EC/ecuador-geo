@@ -5,6 +5,10 @@
 [![npm version](https://img.shields.io/npm/v/@lobo.cyber.ec/ecuador-geo.svg?style=flat-square)](https://www.npmjs.com/package/@lobo.cyber.ec/ecuador-geo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg?style=flat-square)](https://www.typescriptlang.org/)
+[![Dependencias](https://img.shields.io/badge/dependencias-0-brightgreen.svg?style=flat-square)](https://www.npmjs.com/package/@lobo.cyber.ec/ecuador-geo?activeTab=dependencies)
+[![Demo](https://img.shields.io/badge/demo-en%20vivo-0b2a4a.svg?style=flat-square)](https://lce-tech.com/proyectos/ecuador-geo)
+
+> **[Prueba la demo interactiva](https://lce-tech.com/proyectos/ecuador-geo)**: autocompletado, validación de cédula/RUC y selects encadenados funcionando en el navegador. Desarrollado por [Lobo Cyber EC](https://lce-tech.com).
 
 <br />
 
@@ -27,6 +31,9 @@ Una librería moderna y _offline_ que expone la **división política (Provincia
 - [Requisitos del Sistema](#requisitos-del-sistema)
 - [Instalación](#instalación)
 - [Uso Básico](#uso-básico)
+- [Formularios y Dropdowns](#formularios-y-dropdowns)
+- [Cédula y RUC](#cédula-y-ruc)
+- [Región y Zona Horaria](#región-y-zona-horaria)
 - [Funciones Geográficas Avanzadas](#funciones-geográficas-avanzadas)
 - [Integración con Frameworks](#integración-con-frameworks)
 - [Referencia de API](#referencia-de-api)
@@ -44,7 +51,10 @@ Una librería moderna y _offline_ que expone la **división política (Provincia
 - **Universal** -- Funciona en backend (NodeJS, Bun, Deno) y en frontend (React, Vue, Angular, Svelte).
 - **Procesamiento Espacial** -- Calculos matematicos de distancia e iteraciones radiales incorporadas nativamente bajo la _Formula de Haversine_.
 - **Geocodificacion Inversa** -- Resolucion de puntos cardinales georreferenciales (GPS) a puntos limitrofes (Cantones) en mili-segundos.
-- **Busqueda Difusa** -- Funciones integradas para autocompletado de texto con inmunidad a capitalizacion y tildes, con soporte para filtros por tipo y limite de resultados.
+- **Autocompletado Inteligente** -- Busqueda insensible a tildes y mayusculas, ordenada por relevancia y tolerante a errores de escritura ("guayakil" encuentra Guayaquil).
+- **Cedula y RUC** -- Validacion de cedulas y RUC (persona natural, sociedad privada y entidad publica) y provincia de emision.
+- **Listo para Formularios** -- Opciones `{ value, label }` para dropdowns con nombres oficiales con tildes, y texto de ubicacion legible para facturas y envios.
+- **Region y Zona Horaria** -- Costa, Sierra, Amazonia o Insular, y zona horaria IANA (Galapagos va una hora por detras).
 - **Busqueda por Nombre** -- Localiza provincias o cantones directamente por su nombre sin necesidad de conocer codigos INEC.
 - **Zonas No Delimitadas** -- Acceso a los territorios en disputa (zona INEC 90) que otros paquetes ignoran.
 - **Validadores INEC** -- Funciones booleanas rapidas para verificar la existencia real de codigos de provincias, cantones y parroquias.
@@ -91,7 +101,7 @@ console.log(provincias);
 /* Resultado:
 [
   { codigo: "01", nombre: "AZUAY", lat: -2.90055, lng: -79.00453 },
-  { codigo: "02", nombre: "BOLÍVAR", lat: -1.59263, lng: -79.00098 },
+  { codigo: "02", nombre: "BOLIVAR", lat: -1.59263, lng: -79.00098 },
   ...
 ]
 */
@@ -108,9 +118,9 @@ const cantonesGuayas = getCantones("09");
 console.log(cantonesGuayas.slice(0, 3));
 /* Resultado:
 [
-  { codigo: "0901", nombre: "GUAYAQUIL", lat: -2.16667, lng: -79.9 },
-  { codigo: "0902", nombre: "ALFREDO BAQUERIZO MORENO (JUJAN)", lat: -1.91667, lng: -79.51667 },
-  { codigo: "0903", nombre: "BALAO", lat: -2.91667, lng: -79.81667 }
+  { codigo: "0901", nombre: "GUAYAQUIL", lat: -2.19616, lng: -79.88621 },
+  { codigo: "0902", nombre: "ALFREDO BAQUERIZO MORENO (JUJÁN)", lat: -1.91667, lng: -79.51667 },
+  { codigo: "0903", nombre: "BALAO", lat: -2.9106, lng: -79.81505 }
 ]
 */
 ```
@@ -129,14 +139,14 @@ console.log(parroquiasQuito.slice(0, 4));
   { codigo: "170101", nombre: "BELISARIO QUEVEDO" },
   { codigo: "170102", nombre: "CARCELÉN" },
   { codigo: "170103", nombre: "CENTRO HISTÓRICO" },
-  { codigo: "170104", nombre: "CHILLOGALLO" }
+  { codigo: "170104", nombre: "COCHAPAMBA" }
 ]
 */
 ```
 
-### Buscar por Coincidencia (Búsqueda Difusa)
+### Buscar por Coincidencia
 
-Permite buscar texto ignorando mayúsculas y acentos. Extrae arrays mixtos a nivel Provincia, Cantón o Parroquia.
+Busca texto ignorando mayúsculas y acentos. Retorna provincias, cantones y parroquias en orden de código INEC.
 
 ```typescript
 import { buscar } from "@lobo.cyber.ec/ecuador-geo";
@@ -145,43 +155,143 @@ const resultados = buscar("guayaq");
 console.log(resultados.slice(0, 3));
 /* Resultado:
 [
-  { codigo: "0901", nombre: "GUAYAQUIL", tipo: "Cantón", lat: -2.16667, lng: -79.9 },
-  { codigo: "0916", nombre: "GUAYAQUIL", tipo: "Parroquia" },
-  { codigo: "0925", nombre: "GUAYAQUIL", tipo: "Parroquia" }
+  { codigo: "0901", nombre: "GUAYAQUIL", tipo: "Cantón", lat: -2.19616, lng: -79.88621 },
+  { codigo: "090150", nombre: "GUAYAQUIL", tipo: "Parroquia" },
+  { codigo: "100102", nombre: "GUAYAQUIL DE ALPACHACA", tipo: "Parroquia" }
 ]
 */
 ```
 
-### Obtener Detalle de Ubicación por Código
+### Autocompletado Tolerante a Errores
 
-Dado un código INEC territorial (longitud de 2, 4 o 6 caracteres numéricos en String), resuelve automáticamente la herencia territorial en formato O(1).
+Ideal para inputs de búsqueda: ordena por relevancia (primero coincidencias exactas, luego las que empiezan con el texto) y tolera errores de escritura en palabras de 5 letras o más.
 
 ```typescript
-import { getUbicacionPorCodigo } from "@lobo.cyber.ec/ecuador-geo";
+import { autocompletar } from "@lobo.cyber.ec/ecuador-geo";
+
+autocompletar("cuenka", { limite: 2 });
+/* Resultado:
+[
+  { codigo: "0101", nombre: "CUENCA", tipo: "Cantón", lat: -2.90055, lng: -79.00453 },
+  { codigo: "010150", nombre: "CUENCA", tipo: "Parroquia" }
+]
+*/
+
+// Filtrar por tipo y provincia (ej: input dependiente de un select de provincia)
+autocompletar("san", { tipo: "Cantón", codigoProvincia: "09" });
+```
+
+### Obtener Detalle de Ubicación por Código
+
+Dado un código INEC territorial (2, 4 o 6 dígitos), resuelve automáticamente la jerarquía territorial.
+
+```typescript
+import { getUbicacionPorCodigo, formatearUbicacion } from "@lobo.cyber.ec/ecuador-geo";
 
 const detalle = getUbicacionPorCodigo("170150");
-console.log(detalle.provincia.nombre); // PICHINCHA
 console.log(detalle);
 /* Resultado:
 {
   codigo: "170150",
-  nombre: "QUITO",
+  nombre: "QUITO DISTRITO METROPOLITANO",
   tipo: "Parroquia",
   provincia: { codigo: "17", nombre: "PICHINCHA", lat: -0.22985, lng: -78.52495 },
-  canton: { codigo: "1701", nombre: "QUITO", lat: -0.22985, lng: -78.52495 }
+  canton: { codigo: "1701", nombre: "QUITO", lat: -0.18065, lng: -78.46784 }
 }
 */
+
+// Texto legible para facturas, guías de envío o direcciones
+formatearUbicacion("090112"); // "Tarqui, Guayaquil, Guayas"
 ```
+
+---
+
+## <img src="https://api.iconify.design/flat-color-icons:list.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Formularios y Dropdowns
+
+Opciones `{ value, label }` listas para cualquier `<select>`, ordenadas alfabéticamente y con nombres en formato título (las provincias usan su nombre oficial con tildes).
+
+```typescript
+import {
+  getOpcionesProvincias,
+  getOpcionesCantones,
+  getOpcionesParroquias,
+  formatearNombre,
+} from "@lobo.cyber.ec/ecuador-geo";
+
+getOpcionesProvincias().slice(0, 2);
+// [{ value: "01", label: "Azuay" }, { value: "02", label: "Bolívar" }]
+
+getOpcionesProvincias({ region: "Insular" });
+// [{ value: "20", label: "Galápagos" }]
+
+getOpcionesCantones("09").slice(0, 2);
+// [{ value: "0902", label: "Alfredo Baquerizo Moreno (Juján)" }, { value: "0903", label: "Balao" }]
+
+getOpcionesParroquias("09", "0901").slice(0, 2);
+// [{ value: "090101", label: "Ayacucho" }, { value: "090102", label: "Bolívar (Sagrario)" }]
+
+// Mantener el orden por código INEC
+getOpcionesCantones("09", { ordenarPor: "codigo" });
+
+formatearNombre("SAN JACINTO DE YAGUACHI"); // "San Jacinto de Yaguachi"
+```
+
+---
+
+## <img src="https://api.iconify.design/flat-color-icons:businessman.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Cédula y RUC
+
+Valida cédulas (10 dígitos) y RUC (13 dígitos) de persona natural, sociedad privada y entidad pública, y obtiene la provincia de emisión.
+
+```typescript
+import {
+  validarCedula,
+  validarRUC,
+  analizarRUC,
+  getProvinciaPorCedula,
+} from "@lobo.cyber.ec/ecuador-geo";
+
+validarCedula("1710034065"); // true
+validarRUC("1790011674001"); // true
+
+analizarRUC("1790011674001");
+// { valido: true, tipo: "sociedad privada", codigoProvincia: "17", establecimiento: "001" }
+
+getProvinciaPorCedula("1710034065");
+// { codigo: "17", nombre: "PICHINCHA", lat: -0.22985, lng: -78.52495 }
+```
+
+> **Importante:** se valida el formato y el dígito verificador (módulo 10 para cédulas y personas naturales, módulo 11 para sociedades y entidades públicas). No se consulta al Registro Civil ni al SRI si el número existe o está activo. Algunos RUC de extranjeros pueden no seguir el algoritmo estándar. El código de provincia `30` corresponde a ecuatorianos registrados en el exterior.
+
+---
+
+## <img src="https://api.iconify.design/flat-color-icons:clock.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Región y Zona Horaria
+
+```typescript
+import { getRegion, getZonaHoraria, getProvinciasPorRegion } from "@lobo.cyber.ec/ecuador-geo";
+
+getRegion("0901"); // "Costa"
+getRegion("220150"); // "Amazonía"
+
+getZonaHoraria("17"); // "America/Guayaquil" (UTC-5)
+getZonaHoraria("2001"); // "Pacific/Galapagos" (UTC-6)
+
+getProvinciasPorRegion("Insular"); // [{ codigo: "20", nombre: "GALAPAGOS", ... }]
+
+// Hora local de una ubicación
+new Date().toLocaleString("es-EC", { timeZone: getZonaHoraria("2001") });
+```
+
+Acepta códigos de provincia, cantón o parroquia. Las Zonas No Delimitadas (código 90) no tienen región ni zona horaria asignada.
 
 ---
 
 ## <img src="https://api.iconify.design/flat-color-icons:globe.svg" width="28" height="28" style="vertical-align: middle; margin-right: 8px;" /> Funciones Geográficas Avanzadas
 
-Gracias a la inyección de las coordenadas centralizadas (Latitud y Longitud) reales de las Provincias y Cantones, el ecosistema provee herramientas matemáticas espaciales eximiendo la necesidad de instalar dependencias pesadas como `geolib`.
+Gracias a las coordenadas de la cabecera de cada cantón y de la capital de cada provincia, el paquete provee herramientas espaciales sin necesidad de instalar dependencias pesadas como `geolib`.
 
 ### Distancia en línea recta (Fórmula de Haversine)
 
-Calcula la distancia precisa en **kilómetros** entre dos ubicaciones utilizando geometría esférica terrestre. Soporta códigos INEC o coordenadas GPS literales.
+Calcula la distancia en **kilómetros** entre dos ubicaciones utilizando geometría esférica terrestre. Soporta códigos INEC o coordenadas GPS literales.
 
 ```typescript
 import { getDistanciaEntreUbicaciones } from "@lobo.cyber.ec/ecuador-geo";
@@ -189,59 +299,47 @@ import { getDistanciaEntreUbicaciones } from "@lobo.cyber.ec/ecuador-geo";
 // Distancia entre Quito (1701) y Guayaquil (0901)
 const distancia = getDistanciaEntreUbicaciones("1701", "0901");
 console.log(`Distancia: ${distancia} km`);
-// Distancia: 273.03 km (aprox)
+// Distancia: 274.02 km
 
-// Computando con GPS directo en tiempo real
-const desdeGPS = getDistanciaEntreUbicaciones(
-  { lat: -0.18, lng: -78.46 },
-  "0901",
-);
+// Desde coordenadas GPS
+const desdeGPS = getDistanciaEntreUbicaciones({ lat: -0.18, lng: -78.46 }, "0901");
 console.log(desdeGPS);
-// 268.44 (aprox)
+// 274.58
 ```
 
 ### Lugares Cercanos (Resolución Radial)
 
-Obtiene los cantones disponibles contenidos dentro de un radio paramétrico en kilómetros a partir de un cantón central. El retorno es automáticamente clasificado ascendentemente.
+Obtiene los cantones dentro de un radio en kilómetros a partir de un cantón central (o del cantón de una parroquia), ordenados de menor a mayor distancia.
 
 ```typescript
 import { getCantonesCercanos } from "@lobo.cyber.ec/ecuador-geo";
 
-// Analiza los polígonos aledaños en 30KM a la redonda de Quito
-const cantonesAledanos = getCantonesCercanos("1701", 30);
-console.log(cantonesAledanos[0].distanciaKm);
-console.log(cantonesAledanos.slice(0, 3));
+const cantonesAledanos = getCantonesCercanos("1701", 40);
+console.log(cantonesAledanos);
 /* Resultado:
 [
-  { codigo: "1704", nombre: "MEJÍA", lat: -0.5, lng: -78.56667, distanciaKm: 30.31 },
-  { codigo: "1708", nombre: "PEDRO MONCAYO", lat: 0.05, lng: -78.2, distanciaKm: 39.58 },
-  { codigo: "1710", nombre: "RUMIÑAHUI", lat: -0.3, lng: -78.45, distanciaKm: 10.22 }
+  { codigo: "1705", nombre: "RUMIÑAHUI", lat: -0.33405, lng: -78.45217, distanciaKm: 17.15 },
+  { codigo: "1704", nombre: "PEDRO MONCAYO", lat: 0.03333, lng: -78.26667, distanciaKm: 32.66 },
+  { codigo: "1703", nombre: "MEJIA", lat: -0.51667, lng: -78.56667, distanciaKm: 38.95 }
 ]
 */
 ```
 
-### Geocodificación Inversa Topológica
+### Geocodificación Inversa
 
-Resuelve interseciones entre coordenadas enviadas por GPS para deducir de forma autónoma a qué Cantón Ecuatoriano concierne el área circundante del usuario. Optimiza agresivamente los flujos de Onboarding de clientes.
+Dado un punto GPS, retorna el cantón cuya cabecera está más cerca. Útil para preseleccionar la ubicación del usuario en un formulario.
 
 ```typescript
 import { getUbicacionPorCoordenadas } from "@lobo.cyber.ec/ecuador-geo";
 
-const localizacionTelefono = { lat: -2.90055, lng: -79.00453 };
-const resultadoInferencia = getUbicacionPorCoordenadas(localizacionTelefono);
-
-console.log(resultadoInferencia.nombre); // "CUENCA"
-console.log(resultadoInferencia);
+const resultado = getUbicacionPorCoordenadas({ lat: -2.90055, lng: -79.00453 });
+console.log(resultado);
 /* Resultado:
-{
-  codigo: "0101",
-  nombre: "CUENCA",
-  lat: -2.90055,
-  lng: -79.00453,
-  distanciaKm: 0
-}
+{ codigo: "0101", nombre: "CUENCA", lat: -2.90055, lng: -79.00453, distanciaKm: 0 }
 */
 ```
+
+> Se basa en la cabecera cantonal más cercana, no en los límites del cantón: cerca de un límite puede devolver el cantón vecino.
 
 ---
 
@@ -378,7 +476,20 @@ A continuación se detalla cada función principal exportada por el ecosistema.
 | `getParroquias(codigoProv, codigoCanton)`       | `Pick<Parroquia, "codigo" \| "nombre">[]`                  | Array plano territorial listando las parroquias adjuntas al canton provisto.     |
 | `getAllCantones()`                              | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng">[]` | 221 elementos base expuestos linealmente.                                        |
 | `getAllParroquias()`                            | `Pick<Parroquia, "codigo" \| "nombre">[]`                  | 1.396 elementos base expuestos linealmente.                                      |
-| `buscar(query, opciones?)`                      | `BuscarResultado[]`             | Busqueda textual difusa. Acepta `{ limite, tipo }` para filtrar resultados.      |
+| `buscar(query, opciones?)`                      | `BuscarResultado[]`             | Busqueda por subcadena en orden de codigo. Acepta `{ limite, tipo }`.             |
+| `autocompletar(query, opciones?)`               | `BuscarResultado[]`             | Ordenada por relevancia y tolerante a errores. Acepta `{ limite, tipo, codigoProvincia }` (limite por defecto: 10). |
+| `getOpcionesProvincias(config?)`                | `OpcionSelect[]`                | Opciones `{ value, label }`. Acepta `{ region, ordenarPor }`.                    |
+| `getOpcionesCantones(codigoProv, config?)`      | `OpcionSelect[]`                | Opciones de los cantones de una provincia. Acepta `{ ordenarPor }`.              |
+| `getOpcionesParroquias(codigoProv, codigoCanton, config?)` | `OpcionSelect[]`     | Opciones de las parroquias de un canton. Acepta `{ ordenarPor }`.                |
+| `formatearUbicacion(codigo, separador?)`        | `string \| undefined`           | Texto legible: `"Tarqui, Guayaquil, Guayas"`.                                    |
+| `formatearNombre(nombre)`                       | `string`                        | Convierte un nombre INEC a formato titulo en español.                            |
+| `validarCedula(cedula)`                         | `boolean`                       | Valida una cedula de 10 digitos (provincia, tercer digito y modulo 10).          |
+| `validarRUC(ruc)`                               | `boolean`                       | Valida un RUC de 13 digitos de cualquier tipo.                                   |
+| `analizarRUC(ruc)`                              | `RUCDetalle`                    | `{ valido, tipo, codigoProvincia, establecimiento }`.                            |
+| `getProvinciaPorCedula(identificacion)`         | `Pick<Provincia, ...> \| undefined` | Provincia de emision de una cedula o RUC.                                     |
+| `getRegion(codigo)`                             | `Region \| undefined`           | `"Costa"`, `"Sierra"`, `"Amazonía"` o `"Insular"`.                              |
+| `getZonaHoraria(codigo)`                        | `ZonaHoraria \| undefined`      | `"America/Guayaquil"` o `"Pacific/Galapagos"`.                                   |
+| `getProvinciasPorRegion(region)`                | `Pick<Provincia, ...>[]`        | Provincias de una region natural.                                                |
 | `getUbicacionPorCodigo(codigo)`                 | `UbicacionDetalle \| undefined` | Resuelve estructura en cascada mapeando las pertenencias geograficas.            |
 | `getProvinciaPorNombre(nombre)`                 | `Pick<Provincia, "codigo" \| "nombre" \| "lat" \| "lng"> \| undefined` | Busca provincia por nombre exacto o parcial (insensible a acentos).              |
 | `getCantonPorNombre(nombre, codigoProv?)`       | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng"> \| undefined` | Busca canton por nombre exacto o parcial (insensible a acentos). Usa `codigoProv` para desambiguar nombres repetidos (ej: `getCantonPorNombre("Bolívar", "13")`). |
@@ -404,6 +515,7 @@ Este archivo se encuentra en **Release Estándar Mantenido**. La división polí
 - ~~Busqueda por nombre y filtros avanzados~~
 - ~~Zonas No Delimitadas y validadores INEC~~
 - ~~Coordenadas verificadas, cache interno e indice de busqueda~~
+- ~~Validacion de cedula y RUC, opciones para dropdowns, autocompletado tolerante, region y zona horaria~~
 - Empaquetamiento de Geometrias (Poligonos GeoJSON) para renderizado cartografico nativo con leaflet/maptiler.
 
 ---
@@ -420,4 +532,4 @@ Este archivo se encuentra en **Release Estándar Mantenido**. La división polí
 
 Este paquete es distribuido bajo **Licencia MIT**. Es libre y gratuito para uso estrictamente personal o implementaciones en software de categoría comercial/privada. Las contribuciones analíticas al repositorio base se reciben a través de Pull Requests.
 
-**_Mantenimiento Oficial por Lobo Cyber EC_**
+**_Mantenimiento Oficial por [Lobo Cyber EC](https://lce-tech.com)_** · [Demo](https://lce-tech.com/proyectos/ecuador-geo) · [Reportar un problema](https://github.com/Lobo-Cyber-EC/ecuador-geo/issues)

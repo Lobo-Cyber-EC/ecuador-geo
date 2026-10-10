@@ -7,7 +7,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
-## [Sin publicar]
+## [1.2.0] - 2026-10-10
 
 ### Corregido
 
@@ -23,14 +23,21 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ### Agregado
 
+- **Cédula y RUC**: `validarCedula()`, `validarRUC()`, `analizarRUC()` (tipo: persona natural, sociedad privada o entidad pública, provincia y establecimiento) y `getProvinciaPorCedula()`. Validan formato y dígito verificador; no consultan al Registro Civil ni al SRI.
+- **`autocompletar(query, opciones?)`**: búsqueda ordenada por relevancia y tolerante a errores de escritura (`"guayakil"` → Guayaquil, `"riobanba"` → Riobamba), con filtros `limite`, `tipo` y `codigoProvincia`. `buscar()` no cambia.
+- **Opciones para dropdowns**: `getOpcionesProvincias()`, `getOpcionesCantones()` y `getOpcionesParroquias()` retornan `{ value, label }` ordenados alfabéticamente, con nombres en formato título y los nombres oficiales con tildes en las provincias. `getOpcionesProvincias()` acepta un filtro por `region`.
+- **Formato de texto**: `formatearNombre()` (`"SAN JACINTO DE YAGUACHI"` → `"San Jacinto de Yaguachi"`) y `formatearUbicacion()` (`"090112"` → `"Tarqui, Guayaquil, Guayas"`).
+- **Región y zona horaria**: `getRegion()` (Costa, Sierra, Amazonía o Insular), `getZonaHoraria()` (`America/Guayaquil` o `Pacific/Galapagos`) y `getProvinciasPorRegion()`.
+- **Nuevos tipos**: `Region`, `ZonaHoraria`, `OpcionSelect`, `OpcionesSelectConfig`, `OpcionesProvinciasConfig`, `AutocompletarOpciones`, `TipoRUC` y `RUCDetalle`.
 - **`getCantonPorNombre(nombre, codigoProvincia?)`**: nuevo parámetro opcional para desambiguar cantones con el mismo nombre (ej: Bolívar existe en Carchi, Guayas y Manabí).
-- **Tests de calidad de datos**: coordenadas dentro de Ecuador, provincias ubicadas en su capital, códigos sin duplicados, validación de entradas e inmunidad del cache a mutaciones (38 tests en total).
+- **Tests**: calidad de datos, validación de entradas, inmunidad del cache, cédula/RUC, autocompletado, dropdowns y regiones (69 tests en total).
 - **CI**: chequeo de tipos (`npm run typecheck`) antes del build.
 
 ### Mejorado
 
 - **Rendimiento**: cache interno de provincias e índice de búsqueda pre-normalizado. `buscar()` es hasta 33 veces más rápido y `getAllParroquias()` 13 veces más rápido. Los resultados siguen siendo copias independientes, así que modificarlos no altera el cache.
-- **Tamaño del paquete**: se eliminaron los sourcemaps del paquete publicado (434 kB → 142 kB instalado).
+- **Tamaño del paquete**: se eliminaron los sourcemaps del paquete publicado (434 kB → 168 kB instalado, incluyendo las funciones nuevas).
+- **README**: los ejemplos muestran los resultados reales del paquete (varios tenían coordenadas o códigos desactualizados).
 - **`package.json`**: tipos separados para ESM (`.d.mts`) y CJS (`.d.ts`) en `exports`, `sideEffects: false` y `engines`.
 - **Dependencias de desarrollo**: `vitest` 4.1.11, lo que corrige 7 vulnerabilidades (1 crítica). Queda una de severidad baja en `esbuild` (servidor de desarrollo en Windows) que `tsup` todavía no permite actualizar; no afecta al paquete publicado.
 
