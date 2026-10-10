@@ -31,6 +31,7 @@ Una librería moderna y _offline_ que expone la **división política (Provincia
 - [Integración con Frameworks](#integración-con-frameworks)
 - [Referencia de API](#referencia-de-api)
 - [Estado del Proyecto](#estado-del-proyecto)
+- [Fuentes de Datos](#fuentes-de-datos)
 - [Licencia](#licencia)
 
 ---
@@ -47,6 +48,7 @@ Una librería moderna y _offline_ que expone la **división política (Provincia
 - **Busqueda por Nombre** -- Localiza provincias o cantones directamente por su nombre sin necesidad de conocer codigos INEC.
 - **Zonas No Delimitadas** -- Acceso a los territorios en disputa (zona INEC 90) que otros paquetes ignoran.
 - **Validadores INEC** -- Funciones booleanas rapidas para verificar la existencia real de codigos de provincias, cantones y parroquias.
+- **Coordenadas Verificadas** -- Las coordenadas de las 24 provincias y los 221 cantones (cabecera cantonal) estan contrastadas con GeoNames y cubiertas por tests de calidad de datos.
 
 ---
 
@@ -375,13 +377,13 @@ A continuación se detalla cada función principal exportada por el ecosistema.
 | `getCantones(codigoProv)`                       | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng">[]` | Array plano con los Cantones pertenecientes a la provincia dada.                 |
 | `getParroquias(codigoProv, codigoCanton)`       | `Pick<Parroquia, "codigo" \| "nombre">[]`                  | Array plano territorial listando las parroquias adjuntas al canton provisto.     |
 | `getAllCantones()`                              | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng">[]` | 221 elementos base expuestos linealmente.                                        |
-| `getAllParroquias()`                            | `Pick<Parroquia, "codigo" \| "nombre">[]`                  | +800 elementos base expuestos linealmente.                                       |
+| `getAllParroquias()`                            | `Pick<Parroquia, "codigo" \| "nombre">[]`                  | 1.396 elementos base expuestos linealmente.                                      |
 | `buscar(query, opciones?)`                      | `BuscarResultado[]`             | Busqueda textual difusa. Acepta `{ limite, tipo }` para filtrar resultados.      |
 | `getUbicacionPorCodigo(codigo)`                 | `UbicacionDetalle \| undefined` | Resuelve estructura en cascada mapeando las pertenencias geograficas.            |
 | `getProvinciaPorNombre(nombre)`                 | `Pick<Provincia, "codigo" \| "nombre" \| "lat" \| "lng"> \| undefined` | Busca provincia por nombre exacto o parcial (insensible a acentos).              |
-| `getCantonPorNombre(nombre)`                    | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng"> \| undefined` | Busca canton por nombre exacto o parcial (insensible a acentos).                 |
+| `getCantonPorNombre(nombre, codigoProv?)`       | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng"> \| undefined` | Busca canton por nombre exacto o parcial (insensible a acentos). Usa `codigoProv` para desambiguar nombres repetidos (ej: `getCantonPorNombre("Bolívar", "13")`). |
 | `getZonasNoDelimitadas()`                       | `Pick<Canton, "codigo" \| "nombre" \| "lat" \| "lng">[]` | Retorna los 3 cantones de la Zona 90 (territorios en disputa).                   |
-| `esCodigoProvinciaValido(codigo)`               | `boolean`                       | Valida si un codigo de 2 digitos corresponde a una provincia real.               |
+| `esCodigoProvinciaValido(codigo)`               | `boolean`                       | Valida si un codigo de exactamente 2 digitos corresponde a una provincia real (la Zona 90 no es provincia). |
 | `esCodigoCantonValido(codigo)`                  | `boolean`                       | Valida si un codigo de 4 digitos corresponde a un canton real.                   |
 | `esCodigoParroquiaValido(codigo)`               | `boolean`                       | Valida si un codigo de 6 digitos corresponde a una parroquia real.               |
 | `getDistanciaEntreUbicaciones(origen, destino)` | `number \| null`                | Computa la distancia curvada [km]. Acepta `string` o `Coordenada`.               |
@@ -401,7 +403,16 @@ Este archivo se encuentra en **Release Estándar Mantenido**. La división polí
 - ~~Calculo nativo esferico (Haversine)~~
 - ~~Busqueda por nombre y filtros avanzados~~
 - ~~Zonas No Delimitadas y validadores INEC~~
+- ~~Coordenadas verificadas, cache interno e indice de busqueda~~
 - Empaquetamiento de Geometrias (Poligonos GeoJSON) para renderizado cartografico nativo con leaflet/maptiler.
+
+---
+
+## Fuentes de Datos
+
+- **Division politica y codigos**: clasificador geografico del INEC.
+- **Coordenadas**: corresponden a la cabecera cantonal de cada canton (y a la capital en el caso de las provincias). Fueron verificadas contra [GeoNames](https://www.geonames.org/) (licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)); la de Pablo Sexto proviene de Wikipedia.
+- **Limitacion conocida**: La Concordia se mantiene con el codigo `0808` (Esmeraldas), como en el clasificador original, aunque hoy pertenece administrativamente a Santo Domingo de los Tsachilas.
 
 ---
 
