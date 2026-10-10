@@ -96,8 +96,8 @@ export const provinciasData: Record<
       },
       "104": {
         canton: "NABÓN",
-        lat: -3.33333,
-        lng: -78.88333,
+        lat: -3.33875,
+        lng: -79.06572,
         parroquias: {
           "10450": "NABÓN",
           "10451": "COCHAPATA",
@@ -128,8 +128,8 @@ export const provinciasData: Record<
       },
       "106": {
         canton: "PUCARA",
-        lat: -3.16667,
-        lng: -79.66667,
+        lat: -3.2157,
+        lng: -79.4688,
         parroquias: {
           "10650": "PUCARÁ",
           "10651": "CAMILO PONCE ENRÍQUEZ (CAB. EN RÍO 7 DE MOLLEPONGO)",
@@ -138,8 +138,8 @@ export const provinciasData: Record<
       },
       "107": {
         canton: "SAN FERNANDO",
-        lat: -3.21667,
-        lng: -79.18333,
+        lat: -3.14733,
+        lng: -79.25201,
         parroquias: {
           "10750": "SAN FERNANDO",
           "10751": "CHUMBLÍN",
@@ -147,8 +147,8 @@ export const provinciasData: Record<
       },
       "108": {
         canton: "SANTA ISABEL",
-        lat: -3.33333,
-        lng: -79.21667,
+        lat: -3.27471,
+        lng: -79.31475,
         parroquias: {
           "10850": "SANTA ISABEL (CHAGUARURCO)",
           "10851": "ABDÓN CALDERÓN (LA UNIÓN)",
@@ -159,8 +159,8 @@ export const provinciasData: Record<
       },
       "109": {
         canton: "SIGSIG",
-        lat: -3.21667,
-        lng: -78.78333,
+        lat: -3.05089,
+        lng: -78.79563,
         parroquias: {
           "10950": "SIGSIG",
           "10951": "CUCHIL (CUTCHIL)",
@@ -173,8 +173,8 @@ export const provinciasData: Record<
       },
       "110": {
         canton: "OÑA",
-        lat: -3.61667,
-        lng: -79.23333,
+        lat: -3.46986,
+        lng: -79.15436,
         parroquias: {
           "11050": "SAN FELIPE DE OÑA CABECERA CANTONAL",
           "11051": "SUSUDEL",
@@ -182,8 +182,8 @@ export const provinciasData: Record<
       },
       "111": {
         canton: "CHORDELEG",
-        lat: -3.16667,
-        lng: -78.78333,
+        lat: -2.92285,
+        lng: -78.77533,
         parroquias: {
           "11150": "CHORDELEG",
           "11151": "PRINCIPAL",
@@ -194,8 +194,8 @@ export const provinciasData: Record<
       },
       "112": {
         canton: "EL PAN",
-        lat: -2.63333,
-        lng: -78.66667,
+        lat: -2.78779,
+        lng: -78.66956,
         parroquias: {
           "11250": "EL PAN",
           "11251": "AMALUZA",
@@ -215,16 +215,16 @@ export const provinciasData: Record<
       },
       "114": {
         canton: "GUACHAPALA",
-        lat: -2.98333,
-        lng: -78.66667,
+        lat: -2.77246,
+        lng: -78.71252,
         parroquias: {
           "11450": "GUACHAPALA",
         },
       },
       "115": {
         canton: "CAMILO PONCE ENRÍQUEZ",
-        lat: -3.33333,
-        lng: -79.73333,
+        lat: -3.06199,
+        lng: -79.74583,
         parroquias: {
           "11550": "CAMILO PONCE ENRÍQUEZ",
           "11551": "EL CARMEN DE PIJILÍ",
@@ -304,16 +304,16 @@ export const provinciasData: Record<
       },
       "206": {
         canton: "CALUMA",
-        lat: -1.86667,
-        lng: -79.23333,
+        lat: -1.63085,
+        lng: -79.25729,
         parroquias: {
           "20650": "CALUMA",
         },
       },
       "207": {
         canton: "LAS NAVES",
-        lat: -1.66667,
-        lng: -79.33333,
+        lat: -1.28584,
+        lng: -79.31473,
         parroquias: {
           "20701": "LAS MERCEDES",
           "20702": "LAS NAVES",
@@ -402,8 +402,8 @@ export const provinciasData: Record<
       },
       "306": {
         canton: "DÉLEG",
-        lat: -2.68333,
-        lng: -78.78333,
+        lat: -2.7725,
+        lng: -78.91913,
         parroquias: {
           "30650": "DÉLEG",
           "30651": "SOLANO",
@@ -411,8 +411,8 @@ export const provinciasData: Record<
       },
       "307": {
         canton: "SUSCAL",
-        lat: -2.61667,
-        lng: -78.7,
+        lat: -2.43728,
+        lng: -79.05172,
         parroquias: {
           "30750": "SUSCAL",
         },
@@ -447,8 +447,8 @@ export const provinciasData: Record<
       },
       "402": {
         canton: "BOLÍVAR",
-        lat: -1.18333,
-        lng: -80.16667,
+        lat: 0.50245,
+        lng: -77.90533,
         parroquias: {
           "40250": "BOLÍVAR",
           "40251": "GARCÍA MORENO",
@@ -554,8 +554,8 @@ export const provinciasData: Record<
       },
       "503": {
         canton: "PANGUA",
-        lat: -1.25,
-        lng: -79.16667,
+        lat: -1.13663,
+        lng: -79.08137,
         parroquias: {
           "50350": "EL CORAZÓN",
           "50351": "MORASPUNGO",
@@ -594,8 +594,8 @@ export const provinciasData: Record<
       },
       "506": {
         canton: "SAQUISILÍ",
-        lat: -0.83333,
-        lng: -78.53333,
+        lat: -0.8399,
+        lng: -78.667,
         parroquias: {
           "50650": "SAQUISILÍ",
           "50651": "CANCHAGUA",
@@ -605,8 +605,8 @@ export const provinciasData: Record<
       },
       "507": {
         canton: "SIGCHOS",
-        lat: -0.51667,
-        lng: -78.93333,
+        lat: -0.7047,
+        lng: -78.88868,
         parroquias: {
           "50750": "SIGCHOS",
           "50751": "CHUGCHILLÁN",
@@ -680,8 +680,8 @@ export const provinciasData: Record<
       },
       "604": {
         canton: "CHAMBO",
-        lat: -1.66667,
-        lng: -78.66667,
+        lat: -1.73101,
+        lng: -78.59672,
         parroquias: {
           "60450": "CHAMBO",
         },
@@ -729,16 +729,16 @@ export const provinciasData: Record<
       },
       "608": {
         canton: "PALLATANGA",
-        lat: -2.2,
-        lng: -78.86667,
+        lat: -1.99856,
+        lng: -78.96629,
         parroquias: {
           "60850": "PALLATANGA",
         },
       },
       "609": {
         canton: "PENIPE",
-        lat: -1.66667,
-        lng: -78.53333,
+        lat: -1.56592,
+        lng: -78.53159,
         parroquias: {
           "60950": "PENIPE",
           "60951": "EL ALTAR",
@@ -807,8 +807,8 @@ export const provinciasData: Record<
       },
       "704": {
         canton: "BALSAS",
-        lat: -3.73333,
-        lng: -79.73333,
+        lat: -3.76146,
+        lng: -79.82422,
         parroquias: {
           "70450": "BALSAS",
           "70451": "BELLAMARÍA",
@@ -816,8 +816,8 @@ export const provinciasData: Record<
       },
       "705": {
         canton: "CHILLA",
-        lat: -3.56667,
-        lng: -79.65,
+        lat: -3.4581,
+        lng: -79.58122,
         parroquias: {
           "70550": "CHILLA",
         },
@@ -849,8 +849,8 @@ export const provinciasData: Record<
       },
       "708": {
         canton: "MARCABELÍ",
-        lat: -3.66667,
-        lng: -79.61667,
+        lat: -3.7839,
+        lng: -79.91227,
         parroquias: {
           "70850": "MARCABELÍ",
           "70851": "EL INGENIO",
@@ -941,8 +941,8 @@ export const provinciasData: Record<
       },
       "714": {
         canton: "LAS LAJAS",
-        lat: -3.48333,
-        lng: -80.01667,
+        lat: -3.77521,
+        lng: -80.02592,
         parroquias: {
           "71401": "LA VICTORIA",
           "71402": "PLATANILLOS",
@@ -993,8 +993,8 @@ export const provinciasData: Record<
       },
       "802": {
         canton: "ELOY ALFARO",
-        lat: 0.88333,
-        lng: -79.66667,
+        lat: 1.24917,
+        lng: -78.98306,
         parroquias: {
           "80250": "VALDEZ (LIMONES)",
           "80251": "ANCHAYACU",
@@ -1031,8 +1031,8 @@ export const provinciasData: Record<
       },
       "804": {
         canton: "QUININDÉ",
-        lat: 0.93333,
-        lng: -79.46667,
+        lat: 0.32779,
+        lng: -79.47407,
         parroquias: {
           "80450": "ROSA ZÁRATE (QUININDÉ)",
           "80451": "CUBE",
@@ -1076,8 +1076,8 @@ export const provinciasData: Record<
       },
       "807": {
         canton: "RIOVERDE",
-        lat: 1.08333,
-        lng: -79.63333,
+        lat: 1.07282,
+        lng: -79.41255,
         parroquias: {
           "80750": "RIOVERDE",
           "80751": "CHONTADURO",
@@ -1138,16 +1138,16 @@ export const provinciasData: Record<
       },
       "902": {
         canton: "ALFREDO BAQUERIZO MORENO (JUJÁN)",
-        lat: -2.18333,
-        lng: -79.46667,
+        lat: -1.91667,
+        lng: -79.51667,
         parroquias: {
           "90250": "ALFREDO BAQUERIZO MORENO (JUJÁN)",
         },
       },
       "903": {
         canton: "BALAO",
-        lat: -2.28333,
-        lng: -79.73333,
+        lat: -2.9106,
+        lng: -79.81505,
         parroquias: {
           "90350": "BALAO",
         },
@@ -1162,8 +1162,8 @@ export const provinciasData: Record<
       },
       "905": {
         canton: "COLIMES",
-        lat: -1.33333,
-        lng: -79.18333,
+        lat: -1.54566,
+        lng: -80.01158,
         parroquias: {
           "90550": "COLIMES",
           "90551": "SAN JACINTO",
@@ -1214,16 +1214,16 @@ export const provinciasData: Record<
       },
       "909": {
         canton: "EL TRIUNFO",
-        lat: -1.95,
-        lng: -79.96667,
+        lat: -2.33289,
+        lng: -79.40015,
         parroquias: {
           "90950": "EL TRIUNFO",
         },
       },
       "910": {
         canton: "MILAGRO",
-        lat: -1.98333,
-        lng: -79.96667,
+        lat: -2.13396,
+        lng: -79.59337,
         parroquias: {
           "91050": "MILAGRO",
           "91051": "CHOBO",
@@ -1254,8 +1254,8 @@ export const provinciasData: Record<
       },
       "913": {
         canton: "PALESTINA",
-        lat: -1.85,
-        lng: -79.66667,
+        lat: -1.62825,
+        lng: -79.97932,
         parroquias: {
           "91350": "PALESTINA",
         },
@@ -1272,8 +1272,8 @@ export const provinciasData: Record<
       },
       "916": {
         canton: "SAMBORONDÓN",
-        lat: -2.08333,
-        lng: -79.75,
+        lat: -1.96071,
+        lng: -79.72566,
         parroquias: {
           "91601": "SAMBORONDÓN",
           "91602": "LA PUNTILLA (SATÉLITE)",
@@ -1283,14 +1283,16 @@ export const provinciasData: Record<
       },
       "918": {
         canton: "SANTA LUCÍA",
-        lat: -2.18333,
-        lng: -80,
+        lat: -1.7158,
+        lng: -79.98586,
         parroquias: {
           "91850": "SANTA LUCÍA",
         },
       },
       "919": {
         canton: "SALITRE (URBINA JADO)",
+        lat: -1.8302,
+        lng: -79.8179,
         parroquias: {
           "91901": "BOCANA",
           "91902": "CANDILEJOS",
@@ -1327,8 +1329,8 @@ export const provinciasData: Record<
       },
       "922": {
         canton: "SIMÓN BOLÍVAR",
-        lat: -1.86667,
-        lng: -79.73333,
+        lat: -2.00248,
+        lng: -79.48517,
         parroquias: {
           "92250": "SIMÓN BOLÍVAR",
           "92251": "CRNEL.LORENZO DE GARAICOA (PEDREGAL)",
@@ -1336,8 +1338,8 @@ export const provinciasData: Record<
       },
       "923": {
         canton: "CORONEL MARCELINO MARIDUEÑA",
-        lat: -2.03333,
-        lng: -79.36667,
+        lat: -2.21025,
+        lng: -79.43734,
         parroquias: {
           "92350": "CORONEL MARCELINO MARIDUEÑA (SAN CARLOS)",
         },
@@ -1353,24 +1355,24 @@ export const provinciasData: Record<
       },
       "925": {
         canton: "NOBOL",
-        lat: -2.03333,
-        lng: -79.86667,
+        lat: -1.91524,
+        lng: -80.01112,
         parroquias: {
           "92550": "NARCISA DE JESÚS",
         },
       },
       "927": {
         canton: "GENERAL ANTONIO ELIZALDE",
-        lat: -1.95,
-        lng: -79.98333,
+        lat: -2.20152,
+        lng: -79.14146,
         parroquias: {
           "92750": "GENERAL ANTONIO ELIZALDE (BUCAY)",
         },
       },
       "928": {
         canton: "ISIDRO AYORA",
-        lat: -1.98333,
-        lng: -79.73333,
+        lat: -1.88048,
+        lng: -80.14509,
         parroquias: {
           "92850": "ISIDRO AYORA",
         },
@@ -1455,8 +1457,8 @@ export const provinciasData: Record<
       },
       "1005": {
         canton: "PIMAMPIRO",
-        lat: 0.81667,
-        lng: -77.95,
+        lat: 0.39093,
+        lng: -77.94094,
         parroquias: {
           "100550": "PIMAMPIRO",
           "100551": "CHUGÁ",
@@ -1466,8 +1468,8 @@ export const provinciasData: Record<
       },
       "1006": {
         canton: "SAN MIGUEL DE URCUQUÍ",
-        lat: 0.58333,
-        lng: -78.21667,
+        lat: 0.41845,
+        lng: -78.19477,
         parroquias: {
           "100650": "URCUQUÍ CABECERA CANTONAL",
           "100651": "CAHUASQUÍ",
@@ -1511,8 +1513,8 @@ export const provinciasData: Record<
       },
       "1102": {
         canton: "CALVAS",
-        lat: -4.63472,
-        lng: -79.30056,
+        lat: -4.32804,
+        lng: -79.55575,
         parroquias: {
           "110201": "CARIAMANGA",
           "110202": "CHILE",
@@ -1555,8 +1557,8 @@ export const provinciasData: Record<
       },
       "1105": {
         canton: "CHAGUARPAMBA",
-        lat: -3.81667,
-        lng: -79.36667,
+        lat: -3.87776,
+        lng: -79.64455,
         parroquias: {
           "110550": "CHAGUARPAMBA",
           "110551": "BUENAVISTA",
@@ -1567,8 +1569,8 @@ export const provinciasData: Record<
       },
       "1106": {
         canton: "ESPÍNDOLA",
-        lat: -4.51667,
-        lng: -79.66667,
+        lat: -4.58137,
+        lng: -79.42691,
         parroquias: {
           "110650": "AMALUZA",
           "110651": "BELLAVISTA",
@@ -1581,8 +1583,8 @@ export const provinciasData: Record<
       },
       "1107": {
         canton: "GONZANAMÁ",
-        lat: -4.2,
-        lng: -79.61667,
+        lat: -4.23081,
+        lng: -79.43545,
         parroquias: {
           "110750": "GONZANAMÁ",
           "110751": "CHANGAIMINA (LA LIBERTAD)",
@@ -1659,8 +1661,8 @@ export const provinciasData: Record<
       },
       "1112": {
         canton: "SOZORANGA",
-        lat: -3.9,
-        lng: -79.61667,
+        lat: -4.32767,
+        lng: -79.79082,
         parroquias: {
           "111250": "SOZORANGA",
           "111251": "NUEVA FÁTIMA",
@@ -1669,8 +1671,8 @@ export const provinciasData: Record<
       },
       "1113": {
         canton: "ZAPOTILLO",
-        lat: -4.16667,
-        lng: -80.25,
+        lat: -4.38745,
+        lng: -80.24411,
         parroquias: {
           "111350": "ZAPOTILLO",
           "111351": "MANGAHURCO (CAZADEROS)",
@@ -1693,8 +1695,8 @@ export const provinciasData: Record<
       },
       "1115": {
         canton: "QUILANGA",
-        lat: -4.31667,
-        lng: -79.56667,
+        lat: -4.29656,
+        lng: -79.40227,
         parroquias: {
           "111550": "QUILANGA",
           "111551": "FUNDOCHAMBA",
@@ -1703,8 +1705,8 @@ export const provinciasData: Record<
       },
       "1116": {
         canton: "OLMEDO",
-        lat: -4.13333,
-        lng: -79.66667,
+        lat: -3.93435,
+        lng: -79.64646,
         parroquias: {
           "111650": "OLMEDO",
           "111651": "LA TINGUE",
@@ -1736,8 +1738,8 @@ export const provinciasData: Record<
       },
       "1202": {
         canton: "BABA",
-        lat: -1.78944,
-        lng: -79.48944,
+        lat: -1.78443,
+        lng: -79.6787,
         parroquias: {
           "120250": "BABA",
           "120251": "GUARE",
@@ -1754,8 +1756,8 @@ export const provinciasData: Record<
       },
       "1204": {
         canton: "PUEBLOVIEJO",
-        lat: -1.79944,
-        lng: -79.51667,
+        lat: -1.55069,
+        lng: -79.53362,
         parroquias: {
           "120450": "PUEBLOVIEJO",
           "120451": "PUERTO PECHICHE",
@@ -1787,8 +1789,8 @@ export const provinciasData: Record<
       },
       "1206": {
         canton: "URDANETA",
-        lat: -1.21806,
-        lng: -79.48306,
+        lat: -1.57091,
+        lng: -79.47335,
         parroquias: {
           "120650": "CATARAMA",
           "120651": "RICAURTE",
@@ -1819,8 +1821,8 @@ export const provinciasData: Record<
       },
       "1209": {
         canton: "PALENQUE",
-        lat: -1.85,
-        lng: -79.73333,
+        lat: -1.43757,
+        lng: -79.7569,
         parroquias: {
           "120950": "PALENQUE",
         },
@@ -1839,24 +1841,24 @@ export const provinciasData: Record<
       },
       "1211": {
         canton: "VALENCIA",
-        lat: -1.56667,
-        lng: -79.46667,
+        lat: -0.95312,
+        lng: -79.35513,
         parroquias: {
           "121150": "VALENCIA",
         },
       },
       "1212": {
         canton: "MOCACHE",
-        lat: -1.83333,
-        lng: -79.46667,
+        lat: -1.18891,
+        lng: -79.50619,
         parroquias: {
           "121250": "MOCACHE",
         },
       },
       "1213": {
         canton: "QUINSALOMA",
-        lat: -1.86667,
-        lng: -79.46667,
+        lat: -1.20601,
+        lng: -79.31383,
         parroquias: {
           "121350": "QUINSALOMA",
         },
@@ -1894,8 +1896,8 @@ export const provinciasData: Record<
       },
       "1302": {
         canton: "BOLÍVAR",
-        lat: -1.18333,
-        lng: -80.16667,
+        lat: -0.84582,
+        lng: -80.16389,
         parroquias: {
           "130250": "CALCETA",
           "130251": "MEMBRILLO",
@@ -1921,8 +1923,8 @@ export const provinciasData: Record<
       },
       "1304": {
         canton: "EL CARMEN",
-        lat: -0.38333,
-        lng: -79.93333,
+        lat: -0.27527,
+        lng: -79.46222,
         parroquias: {
           "130401": "EL CARMEN",
           "130402": "4 DE DICIEMBRE",
@@ -1933,8 +1935,8 @@ export const provinciasData: Record<
       },
       "1305": {
         canton: "FLAVIO ALFARO",
-        lat: -0.58333,
-        lng: -80.16667,
+        lat: -0.40501,
+        lng: -79.90468,
         parroquias: {
           "130550": "FLAVIO ALFARO",
           "130551": "SAN FRANCISCO DE NOVILLO (CAB. EN",
@@ -1963,8 +1965,8 @@ export const provinciasData: Record<
       },
       "1307": {
         canton: "JUNÍN",
-        lat: -1.06667,
-        lng: -80.08333,
+        lat: -0.92777,
+        lng: -80.20583,
         parroquias: {
           "130750": "JUNÍN",
         },
@@ -2013,8 +2015,8 @@ export const provinciasData: Record<
       },
       "1311": {
         canton: "PICHINCHA",
-        lat: -0.51667,
-        lng: -80.11667,
+        lat: -1.04695,
+        lng: -79.82139,
         parroquias: {
           "131150": "PICHINCHA",
           "131151": "BARRAGANETE",
@@ -2046,8 +2048,8 @@ export const provinciasData: Record<
       },
       "1314": {
         canton: "SUCRE",
-        lat: -0.6,
-        lng: -80.33333,
+        lat: -0.60033,
+        lng: -80.42444,
         parroquias: {
           "131401": "BAHÍA DE CARÁQUEZ",
           "131402": "LEONIDAS PLAZA GUTIÉRREZ",
@@ -2074,8 +2076,8 @@ export const provinciasData: Record<
       },
       "1316": {
         canton: "24 DE MAYO",
-        lat: -1.38333,
-        lng: -80.25,
+        lat: -1.27987,
+        lng: -80.41776,
         parroquias: {
           "131650": "SUCRE",
           "131651": "BELLAVISTA",
@@ -2096,8 +2098,8 @@ export const provinciasData: Record<
       },
       "1318": {
         canton: "OLMEDO",
-        lat: -4.13333,
-        lng: -79.66667,
+        lat: -1.39527,
+        lng: -80.2108,
         parroquias: {
           "131850": "OLMEDO",
         },
@@ -2114,24 +2116,24 @@ export const provinciasData: Record<
       },
       "1320": {
         canton: "JAMA",
-        lat: -0.93333,
-        lng: -80.06667,
+        lat: -0.20172,
+        lng: -80.26358,
         parroquias: {
           "132050": "JAMA",
         },
       },
       "1321": {
         canton: "JARAMIJÓ",
-        lat: -1.05417,
-        lng: -80.66194,
+        lat: -0.94886,
+        lng: -80.63806,
         parroquias: {
           "132150": "JARAMIJÓ",
         },
       },
       "1322": {
         canton: "SAN VICENTE",
-        lat: -0.6,
-        lng: -80,
+        lat: -0.58998,
+        lng: -80.40704,
         parroquias: {
           "132250": "SAN VICENTE",
           "132251": "CANOA",
@@ -2186,8 +2188,8 @@ export const provinciasData: Record<
       },
       "1403": {
         canton: "LIMÓN INDANZA",
-        lat: -3.41667,
-        lng: -78.2,
+        lat: -2.96677,
+        lng: -78.43207,
         parroquias: {
           "140350": "GENERAL LEONIDAS PLAZA GUTIÉRREZ (LIMÓN)",
           "140351": "INDANZA",
@@ -2214,8 +2216,8 @@ export const provinciasData: Record<
       },
       "1405": {
         canton: "SANTIAGO",
-        lat: -2.06667,
-        lng: -77.63333,
+        lat: -2.71851,
+        lng: -78.31936,
         parroquias: {
           "140550": "SANTIAGO DE MÉNDEZ",
           "140551": "COPAL",
@@ -2252,8 +2254,8 @@ export const provinciasData: Record<
       },
       "1408": {
         canton: "SAN JUAN BOSCO",
-        lat: -2.61667,
-        lng: -78.21667,
+        lat: -3.11905,
+        lng: -78.53089,
         parroquias: {
           "140850": "SAN JUAN BOSCO",
           "140851": "PAN DE AZÚCAR",
@@ -2264,8 +2266,8 @@ export const provinciasData: Record<
       },
       "1409": {
         canton: "TAISHA",
-        lat: -2.43333,
-        lng: -77.48333,
+        lat: -2.33965,
+        lng: -77.46031,
         parroquias: {
           "140950": "TAISHA",
           "140951": "HUASAGA (CAB. EN WAMPUIK)",
@@ -2276,8 +2278,8 @@ export const provinciasData: Record<
       },
       "1410": {
         canton: "LOGROÑO",
-        lat: -3.08333,
-        lng: -78.56667,
+        lat: -2.61677,
+        lng: -78.20898,
         parroquias: {
           "141050": "LOGROÑO",
           "141051": "YAUPI",
@@ -2286,16 +2288,16 @@ export const provinciasData: Record<
       },
       "1411": {
         canton: "PABLO SEXTO",
-        lat: -1.71667,
-        lng: -77.63333,
+        lat: -1.80306,
+        lng: -77.92111,
         parroquias: {
           "141150": "PABLO SEXTO",
         },
       },
       "1412": {
         canton: "TIWINTZA",
-        lat: -2.63333,
-        lng: -77.5,
+        lat: -3.03833,
+        lng: -78.04083,
         parroquias: {
           "141250": "SANTIAGO",
           "141251": "SAN JOSÉ DE MORONA",
@@ -2339,8 +2341,8 @@ export const provinciasData: Record<
       },
       "1504": {
         canton: "EL CHACO",
-        lat: -0.46667,
-        lng: -77.81667,
+        lat: -0.33904,
+        lng: -77.81115,
         parroquias: {
           "150450": "EL CHACO",
           "150451": "GONZALO DíAZ DE PINEDA (EL BOMBÓN)",
@@ -2366,8 +2368,8 @@ export const provinciasData: Record<
       },
       "1509": {
         canton: "CARLOS JULIO AROSEMENA TOLA",
-        lat: -1.08333,
-        lng: -77.61667,
+        lat: -1.16608,
+        lng: -77.85533,
         parroquias: {
           "150950": "CARLOS JULIO AROSEMENA TOLA",
         },
@@ -2405,8 +2407,8 @@ export const provinciasData: Record<
       },
       "1602": {
         canton: "MERA",
-        lat: -1.45,
-        lng: -78.63333,
+        lat: -1.46053,
+        lng: -78.11348,
         parroquias: {
           "160250": "MERA",
           "160251": "MADRE TIERRA",
@@ -2415,8 +2417,8 @@ export const provinciasData: Record<
       },
       "1603": {
         canton: "SANTA CLARA",
-        lat: -1.43333,
-        lng: -77.93333,
+        lat: -1.26399,
+        lng: -77.88739,
         parroquias: {
           "160350": "SANTA CLARA",
           "160351": "SAN JOSÉ",
@@ -2560,8 +2562,8 @@ export const provinciasData: Record<
       },
       "1705": {
         canton: "RUMIÑAHUI",
-        lat: -0.31667,
-        lng: -78.56667,
+        lat: -0.33405,
+        lng: -78.45217,
         parroquias: {
           "170501": "SANGOLQUÍ",
           "170502": "SAN PEDRO DE TABOADA",
@@ -2592,8 +2594,8 @@ export const provinciasData: Record<
       },
       "1709": {
         canton: "PUERTO QUITO",
-        lat: 0.05,
-        lng: -79.05,
+        lat: 0.12123,
+        lng: -79.25399,
         parroquias: {
           "170950": "PUERTO QUITO",
         },
@@ -2738,8 +2740,8 @@ export const provinciasData: Record<
   },
   "19": {
     provincia: "ZAMORA CHINCHIPE",
-    lat: 41.50633,
-    lng: -5.74456,
+    lat: -4.06667,
+    lng: -78.95,
     cantones: {
       "1901": {
         canton: "ZAMORA",
@@ -2761,8 +2763,8 @@ export const provinciasData: Record<
       },
       "1902": {
         canton: "CHINCHIPE",
-        lat: -4.55,
-        lng: -79.16667,
+        lat: -4.86334,
+        lng: -79.13112,
         parroquias: {
           "190250": "ZUMBA",
           "190251": "CHITO",
@@ -2778,8 +2780,8 @@ export const provinciasData: Record<
       },
       "1903": {
         canton: "NANGARITZA",
-        lat: -4.16667,
-        lng: -78.66667,
+        lat: -4.04292,
+        lng: -78.68004,
         parroquias: {
           "190350": "GUAYZIMI",
           "190351": "ZURMI",
@@ -2788,8 +2790,8 @@ export const provinciasData: Record<
       },
       "1904": {
         canton: "YACUAMBI",
-        lat: -3.83333,
-        lng: -79.1,
+        lat: -3.63617,
+        lng: -78.92654,
         parroquias: {
           "190450": "28 DE MAYO (SAN JOSÉ DE YACUAMBI)",
           "190451": "LA PAZ",
@@ -2798,6 +2800,8 @@ export const provinciasData: Record<
       },
       "1905": {
         canton: "YANTZAZA (YANZATZA)",
+        lat: -3.83299,
+        lng: -78.76122,
         parroquias: {
           "190550": "YANTZAZA (YANZATZA)",
           "190551": "CHICAÑA",
@@ -2818,8 +2822,8 @@ export const provinciasData: Record<
       },
       "1907": {
         canton: "CENTINELA DEL CÓNDOR",
-        lat: -3.61667,
-        lng: -78.66667,
+        lat: -3.89497,
+        lng: -78.77977,
         parroquias: {
           "190750": "ZUMBI",
           "190751": "PAQUISHA",
@@ -2829,8 +2833,8 @@ export const provinciasData: Record<
       },
       "1908": {
         canton: "PALANDA",
-        lat: -4.41667,
-        lng: -79.16667,
+        lat: -4.64953,
+        lng: -79.1323,
         parroquias: {
           "190850": "PALANDA",
           "190851": "EL PORVENIR DEL CARMEN",
@@ -2841,8 +2845,8 @@ export const provinciasData: Record<
       },
       "1909": {
         canton: "PAQUISHA",
-        lat: -3.66667,
-        lng: -78.66667,
+        lat: -3.93391,
+        lng: -78.67562,
         parroquias: {
           "190950": "PAQUISHA",
           "190951": "BELLAVISTA",
@@ -2853,8 +2857,8 @@ export const provinciasData: Record<
   },
   "20": {
     provincia: "GALAPAGOS",
-    lat: 0.35,
-    lng: -78.73333,
+    lat: -0.9,
+    lng: -89.6,
     cantones: {
       "2001": {
         canton: "SAN CRISTÓBAL",
@@ -2877,8 +2881,8 @@ export const provinciasData: Record<
       },
       "2003": {
         canton: "SANTA CRUZ",
-        lat: -0.61667,
-        lng: -90.36667,
+        lat: -0.74018,
+        lng: -90.3138,
         parroquias: {
           "200350": "PUERTO AYORA",
           "200351": "BELLAVISTA",
@@ -2911,8 +2915,8 @@ export const provinciasData: Record<
       },
       "2102": {
         canton: "GONZALO PIZARRO",
-        lat: 0.1,
-        lng: -77.58333,
+        lat: 0.04639,
+        lng: -77.32972,
         parroquias: {
           "210250": "EL DORADO DE CASCALES",
           "210251": "EL REVENTADOR",
@@ -2949,8 +2953,8 @@ export const provinciasData: Record<
       },
       "2105": {
         canton: "SUCUMBÍOS",
-        lat: 0.08333,
-        lng: -77.33333,
+        lat: 0.47228,
+        lng: -77.54479,
         parroquias: {
           "210550": "LA BONITA",
           "210551": "EL PLAYÓN DE SAN FRANCISCO",
@@ -2961,8 +2965,8 @@ export const provinciasData: Record<
       },
       "2106": {
         canton: "CASCALES",
-        lat: 0.08333,
-        lng: -77.33333,
+        lat: 0.07884,
+        lng: -77.21304,
         parroquias: {
           "210650": "EL DORADO DE CASCALES",
           "210651": "SANTA ROSA DE SUCUMBÍOS",
@@ -2971,8 +2975,8 @@ export const provinciasData: Record<
       },
       "2107": {
         canton: "CUYABENO",
-        lat: -0.01667,
-        lng: -76.16667,
+        lat: -0.12425,
+        lng: -76.3457,
         parroquias: {
           "210750": "TARAPOA",
           "210751": "CUYABENO",
@@ -2983,11 +2987,13 @@ export const provinciasData: Record<
   },
   "22": {
     provincia: "ORELLANA",
-    lat: -0.933333,
-    lng: -75.666667,
+    lat: -0.44967,
+    lng: -76.99724,
     cantones: {
       "2201": {
         canton: "ORELLANA",
+        lat: -0.44967,
+        lng: -76.99724,
         parroquias: {
           "220150": "PUERTO FRANCISCO DE ORELLANA (EL COCA)",
           "220151": "DAYUMA",
@@ -3005,8 +3011,8 @@ export const provinciasData: Record<
       },
       "2202": {
         canton: "AGUARICO",
-        lat: -0.08333,
-        lng: -75.41667,
+        lat: -0.92624,
+        lng: -75.40243,
         parroquias: {
           "220201": "TIPITINI",
           "220250": "NUEVO ROCAFUERTE",
@@ -3035,8 +3041,8 @@ export const provinciasData: Record<
       },
       "2204": {
         canton: "LORETO",
-        lat: -0.58333,
-        lng: -77.33333,
+        lat: -0.69243,
+        lng: -77.31115,
         parroquias: {
           "220450": "LORETO",
           "220451": "AVILA (CAB. EN HUIRUNO)",
